@@ -1,0 +1,28 @@
+{
+  "name": "greenorred-home",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --config 'Home Page/vite.config.js' --host 0.0.0.0 --port 4173",
+    "build": "node 'Home Page/scripts/build.mjs'",
+    "test": "node --test 'Home Page/tests/'*.test.mjs",
+    "db:generate": "drizzle-kit generate",
+    "assets": "node \"Home Page/scripts/assets.mjs\""
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "drizzle-orm": "^0.38.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "sharp": "^0.35.4",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
+    "drizzle-kit": "^0.30.0",
+    "esbuild": "^0.25.0",
+    "prettier": "^3.9.9",
+    "vite": "^6.1.0"
+  }
+}
