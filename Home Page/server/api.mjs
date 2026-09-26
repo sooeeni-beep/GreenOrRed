@@ -2,7 +2,9 @@ import {
   defaultConfig,
   configSchema,
   publicConfig,
+  normalizeConfig,
 } from "../shared/config.mjs";
+import { uploadMedia, readMedia } from "./media.mjs";
 const json = (body, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
@@ -12,7 +14,7 @@ const json = (body, status = 200) =>
       "x-content-type-options": "nosniff",
     },
   });
-export async function handleApi(request, db, userId) {
+export async function handleApi(request, db, userId, bucket) {
   const path = new URL(request.url).pathname;
   if (!db)
     return json(
@@ -23,6 +25,11 @@ export async function handleApi(request, db, userId) {
       503,
     );
   try {
+    if (
+      path.startsWith("/api/media/") &&
+      ["GET", "HEAD"].includes(request.method)
+    )
+      return readMedia(request, bucket);
     if (path === "/api/home" && request.method === "GET") {
       const row = await db
         .prepare("SELECT config,revision FROM home_state WHERE id = ?")
@@ -54,6 +61,12 @@ export async function handleApi(request, db, userId) {
         { error: "Only the homepage owner can administer this site." },
         403,
       );
+    if (path === "/api/admin/media" && request.method === "POST") {
+      const origin = request.headers.get("origin");
+      if (origin && origin !== new URL(request.url).origin)
+        return json({ error: "Cross-origin writes are not allowed." }, 403);
+      return await uploadMedia(request, bucket);
+    }
     if (path === "/api/admin/home" && request.method === "GET") {
       const row = await db
         .prepare(
@@ -62,7 +75,7 @@ export async function handleApi(request, db, userId) {
         .bind("home")
         .first();
       return json({
-        config: row ? JSON.parse(row.config) : defaultConfig,
+        config: normalizeConfig(row ? JSON.parse(row.config) : defaultConfig),
         revision: row?.revision ?? 0,
         updatedAt: row?.updated_at ?? null,
       });
@@ -74,7 +87,7 @@ export async function handleApi(request, db, userId) {
       if (!request.headers.get("content-type")?.includes("application/json"))
         return json({ error: "JSON required" }, 415);
       const text = await request.text();
-      if (text.length > 64000)
+      if (text.length > 256000)
         return json({ error: "Configuration too large" }, 413);
       let body;
       try {

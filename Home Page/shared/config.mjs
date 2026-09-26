@@ -1,4 +1,12 @@
 import { z } from "zod";
+import {
+  blockSchema,
+  heroSchema,
+  heroDefaults,
+  contentSchema,
+  mediaUrl,
+  validateCampaignOverlap,
+} from "./media.mjs";
 export const moduleTypes = [
   "traders",
   "developers",
@@ -31,6 +39,10 @@ export const moduleSchema = z.object({
   order: z.number().int().min(0).max(999),
   theme: z.enum(["green", "orange", "red"]),
   blocks: z.array(z.string().regex(/^[a-z][a-z0-9-]{0,49}$/)).max(20),
+  cardIcon: mediaUrl.default(""),
+  ctaFa: optional,
+  layout: z.enum(["stack", "split", "grid"]).default("stack"),
+  contentBlocks: z.array(blockSchema).max(20).default([]),
   cta: optional,
   url: z
     .string()
@@ -43,9 +55,93 @@ export const moduleSchema = z.object({
 export const configSchema = z
   .object({
     schemaVersion: z.literal(1),
+    hero: heroSchema.default(heroDefaults),
+    content: z.array(contentSchema).max(100).default([]),
+    mediaLibrary: z
+      .array(
+        z.object({
+          url: mediaUrl,
+          type: z.string().max(80),
+          name: z.string().max(200),
+          size: z.number(),
+        }),
+      )
+      .max(200)
+      .default([]),
     modules: z.array(moduleSchema).max(30),
   })
   .superRefine((v, ctx) => {
+    for (const list of [
+      v.content,
+      v.hero.campaigns,
+      ...v.modules.map((m) => m.contentBlocks),
+    ]) {
+      if (new Set(list.map((x) => x.id)).size !== list.length)
+        ctx.addIssue({
+          code: "custom",
+          message: "Each item needs a unique ID",
+        });
+    }
+    const imageFields = [
+      ...v.modules.map((m) => m.cardIcon),
+      ...v.modules.flatMap((m) => m.contentBlocks.map((b) => b.mobileMedia)),
+      ...[v.hero.laptop, v.hero.phone, ...v.hero.campaigns].map(
+        (s) => s.poster,
+      ),
+    ];
+    if (imageFields.some((url) => url && !/\.(png|jpg|webp)$/.test(url)))
+      ctx.addIssue({
+        code: "custom",
+        message: "Invalid media type for image field",
+      });
+    if (validateCampaignOverlap(v.hero.campaigns))
+      ctx.addIssue({
+        code: "custom",
+        message: "Approved campaigns overlap in the same slot",
+      });
+    for (const item of [v.hero.laptop, v.hero.phone, ...v.hero.campaigns]) {
+      if (
+        item.media &&
+        ((item.mode === "video" && !/\.(mp4|webm)$/.test(item.media)) ||
+          (item.mode === "image" && !/\.(png|jpg|webp)$/.test(item.media)))
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: "Invalid media type for slot",
+        });
+    }
+    for (const m of v.modules)
+      for (const b of m.contentBlocks) {
+        if (
+          b.media &&
+          ((b.type === "video" && !/\.(mp4|webm)$/.test(b.media)) ||
+            (b.type !== "video" && !/\.(png|jpg|webp)$/.test(b.media)))
+        )
+          ctx.addIssue({
+            code: "custom",
+            message: "Invalid media type for block",
+          });
+      }
+    for (const item of v.content) {
+      if (
+        (item.image && !/\.(png|jpg|webp)$/.test(item.image)) ||
+        (item.video && !/\.(mp4|webm)$/.test(item.video))
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: "Invalid media type for content",
+        });
+      if (
+        item.kind === "video" &&
+        item.status === "published" &&
+        !item.video &&
+        !item.url
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: "Published content needs a video or destination",
+        });
+    }
     const ids = v.modules.map((m) => m.id);
     if (new Set(ids).size !== ids.length)
       ctx.addIssue({
@@ -157,5 +253,19 @@ export function toggleModule(current, id) {
   return current === id ? null : id;
 }
 export function publicConfig(config) {
-  return { ...config, modules: visibleModules(config) };
+  const c = normalizeConfig(config);
+  const { mediaLibrary, ...publicFields } = c;
+  return {
+    ...publicFields,
+    modules: visibleModules(c),
+    content: c.content.filter((v) => v.status === "published"),
+    hero: {
+      ...c.hero,
+      campaigns: c.hero.campaigns.filter((v) => v.status === "approved"),
+    },
+  };
+}
+
+export function normalizeConfig(config) {
+  return configSchema.parse(config);
 }

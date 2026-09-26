@@ -12,29 +12,26 @@ import { Asset, AssetButton, More, Modal } from "./components";
 import { ModuleContent } from "./sections";
 import { visibleModules, toggleModule } from "../shared/config.mjs";
 import Admin from "./Admin";
+import HeroMedia from "./HeroMedia";
+import { I18nProvider, useI18n } from "./i18n";
 export default function App() {
-  if (location.pathname.startsWith("/admin")) return <Admin />;
-  return <Home />;
+  return (
+    <I18nProvider>
+      {location.pathname.startsWith("/admin") ? <Admin /> : <Home />}
+    </I18nProvider>
+  );
 }
 function Home() {
   const [config, setConfig] = useState(null),
     [error, setError] = useState(""),
     [active, setActive] = useState(null),
-    [lang, setLang] = useState(
-      () => localStorage.getItem("gor-language") || "en",
-    ),
     [menu, setMenu] = useState(false),
     [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
     [modal, setModal] = useState(null),
     [cart, setCart] = useState([]),
     [toast, setToast] = useState("");
-  const t = (en, fa) => (lang === "fa" ? fa || en : en);
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    document.documentElement.dir = lang === "fa" ? "rtl" : "ltr";
-    localStorage.setItem("gor-language", lang);
-  }, [lang]);
+  const { t, lang, setLang } = useI18n();
   const load = () => {
     setError("");
     fetch("/api/home")
@@ -57,9 +54,9 @@ function Home() {
   const current = cards.find((m) => m.id === active);
   const open = (title, description) =>
     setModal({
-      title,
+      title: t(title),
       description:
-        description ||
+        (description ? t(description) : null) ||
         t(
           "This destination is part of the next development stage. The homepage is ready; this service is not connected yet.",
           "این مقصد در مرحلهٔ بعدی توسعه ساخته می‌شود. صفحهٔ هوم آماده است، اما این سرویس هنوز متصل نشده است.",
@@ -98,7 +95,7 @@ function Home() {
   return (
     <>
       <a href="#main" className="skip-link">
-        Skip to content
+        {t("Skip to content")}
       </a>
       <header className="site-header">
         <div className="header-inner">
@@ -107,7 +104,7 @@ function Home() {
           </a>
           <nav
             className={menu ? "nav open" : "nav"}
-            aria-label="Main navigation"
+            aria-label={t("Main navigation")}
           >
             <button onClick={() => showModule("traders")}>
               {t("Marketplace", "بازارچه")}
@@ -125,11 +122,11 @@ function Home() {
             </button>
           </nav>
           <form className="header-search" onSubmit={submitSearch}>
-            <button aria-label="Search products">
+            <button aria-label={t("Search products")}>
               <Search size={18} />
             </button>
             <input
-              aria-label="Search products"
+              aria-label={t("Search products")}
               placeholder={t(
                 "Search products, educators, tools…",
                 "جست‌وجوی محصولات و ابزارها…",
@@ -143,7 +140,10 @@ function Home() {
             onClick={() =>
               setModal({ title: t("Your demo cart", "سبد نمایشی"), cart: true })
             }
-            aria-label={"Open demo cart, " + cart.length + " items"}
+            aria-label={t(
+              "Open demo cart, " + cart.length + " items",
+              "بازکردن سبد نمایشی با " + cart.length + " کالا",
+            )}
           >
             <Asset name="cart" />
             <span>{cart.length}</span>
@@ -157,7 +157,7 @@ function Home() {
           <button
             className="language"
             onClick={() => setLang(lang === "en" ? "fa" : "en")}
-            aria-label="Switch language"
+            aria-label={t("Switch language")}
           >
             <Globe size={14} />
             {lang === "en" ? "EN" : "FA"}
@@ -166,7 +166,7 @@ function Home() {
           <button
             className="mobile-menu"
             onClick={() => setMenu(!menu)}
-            aria-label="Toggle navigation"
+            aria-label={t("Toggle navigation")}
             aria-expanded={menu}
           >
             {menu ? <X /> : <Menu />}
@@ -175,7 +175,6 @@ function Home() {
       </header>
       <main id="main" className="page">
         <section className="hero">
-          <Asset name="hero-decoration" className="hero-decoration" />
           <div className="hero-copy">
             <p className="eyebrow">
               {t(
@@ -214,15 +213,7 @@ function Home() {
             </div>
           </div>
           <div className="hero-visual">
-            <div className="hero-devices">
-              <Asset
-                name="hero-shell"
-                alt="GreenOrRed trading dashboard on laptop and mobile"
-                className="hero-shell"
-              />
-              <Asset name="hero-laptop-screen" className="laptop-screen" />
-              <Asset name="hero-phone-screen" className="phone-screen" />
-            </div>
+            <HeroMedia hero={config?.hero} />
             <div className="platforms">
               <span>{t("Supported Platforms", "پلتفرم‌های پشتیبانی‌شده")}</span>
               <div>
@@ -240,16 +231,15 @@ function Home() {
           </div>
           <div className="hero-stats">
             {[
-              ["members", "5,000+", "Active Members", "اعضای فعال"],
-              ["products", "1,200+", "Products", "محصول"],
-              ["educators", "300+", "Educators", "آموزش‌دهنده"],
-              ["satisfaction", "98%", "Customer Satisfaction", "رضایت کاربران"],
-            ].map(([id, value, en, fa]) => (
+              ["members", "Community", "انجمن معامله‌گران"],
+              ["products", "Trading tools", "ابزارهای معاملاتی"],
+              ["educators", "Education", "آموزش"],
+              ["satisfaction", "Built for traders", "برای معامله‌گران"],
+            ].map(([id, en, fa]) => (
               <div key={id}>
                 <Asset name={id} />
                 <span>
-                  <strong>{value}</strong>
-                  <small>{t(en, fa)}</small>
+                  <strong>{t(en, fa)}</strong>
                 </span>
               </div>
             ))}
@@ -257,12 +247,15 @@ function Home() {
         </section>
         {error ? (
           <div className="error" role="alert">
-            {error}
-            <button onClick={load}>Retry</button>
+            {t(
+              "Could not load the homepage. Please try again.",
+              "بارگذاری صفحه ممکن نشد. دوباره تلاش کنید.",
+            )}
+            <button onClick={load}>{t("Retry")}</button>
           </div>
         ) : !config ? (
           <div className="loading" role="status">
-            Loading your trading space…
+            {t("Loading your trading space…")}
           </div>
         ) : (
           <>
@@ -301,14 +294,13 @@ function Home() {
                           ? m.type + "-card"
                           : "traders-card"
                       }
+                      src={m.cardIcon || undefined}
                       className="path-icon"
                     />
                     <span>
                       <strong>{t(m.title, m.titleFa)}</strong>
                       <small>{t(m.description, m.descriptionFa)}</small>
-                      {m.status !== "active" && (
-                        <em>{m.status.replace("-", " ")}</em>
-                      )}
+                      {m.status !== "active" && <em>{t(m.status)}</em>}
                     </span>
                     <Asset
                       name={
@@ -360,6 +352,7 @@ function Home() {
                     open={open}
                     t={t}
                     addToCart={addToCart}
+                    content={config.content}
                     query={query}
                   />
                 </div>
@@ -372,6 +365,7 @@ function Home() {
                   open={open}
                   t={t}
                   addToCart={addToCart}
+                  content={config.content}
                   query={query}
                 />
               </div>
@@ -382,7 +376,12 @@ function Home() {
       <footer className="site-footer page">
         <div className="footer-brand">
           <Asset name="brand" alt="GreenOrRed" />
-          <small>© 2026 GreenOrRed. All rights reserved.</small>
+          <small>
+            {t(
+              "© 2026 GreenOrRed. All rights reserved.",
+              "© ۲۰۲۶ گرین‌اوررد. تمامی حقوق محفوظ است.",
+            )}
+          </small>
         </div>
         {[
           ["Marketplace", "Indicators", "Experts", "Scripts", "Signals"],
@@ -410,16 +409,16 @@ function Home() {
           ],
         ].map(([title, ...links]) => (
           <div className="footer-column" key={title}>
-            <h3>{title}</h3>
+            <h3>{t(title)}</h3>
             {links.map((link) => (
               <button key={link} onClick={() => open(link)}>
-                {link}
+                {t(link)}
               </button>
             ))}
           </div>
         ))}
         <div className="footer-follow">
-          <h3>Follow Us</h3>
+          <h3>{t("Follow Us")}</h3>
           <div className="socials">
             {["x", "youtube", "discord", "telegram"].map((id) => (
               <button
@@ -436,20 +435,12 @@ function Home() {
               </button>
             ))}
           </div>
-          <Asset name="footer-tagline" alt="Trade Smarter. Grow together." />
-          <span>Theme C — Forest Terracotta</span>
-          <div className="swatches">
-            {[
-              "#004c36",
-              "#a63f28",
-              "#c86944",
-              "#b77c62",
-              "#dfceb4",
-              "#deddd0",
-            ].map((c) => (
-              <i style={{ background: c }} key={c} />
-            ))}
-          </div>
+          <p className="footer-tagline">
+            {t(
+              "Trade Smarter. Grow together.",
+              "هوشمندانه معامله کن. با هم رشد کنیم.",
+            )}
+          </p>
         </div>
         <div className="footer-test">
           <span>
@@ -474,22 +465,27 @@ function Home() {
           {modal.cart ? (
             <>
               <p className="muted">
-                Demo cart — checkout and payments are not connected.
+                {t("Demo cart — checkout and payments are not connected.")}
               </p>
               {cart.length === 0 ? (
-                <p>Your cart is empty.</p>
+                <p>{t("Your cart is empty.")}</p>
               ) : (
                 <>
                   <ul className="cart-list">
                     {cart.map((p, i) => (
                       <li key={i}>
                         <span>{p.name}</span>
-                        <strong>${p.price}</strong>
+                        <strong>
+                          {new Intl.NumberFormat(
+                            lang === "fa" ? "fa-IR" : "en-US",
+                            { style: "currency", currency: p.currency },
+                          ).format(p.price)}
+                        </strong>
                         <button
                           onClick={() =>
                             setCart((c) => c.filter((_, j) => j !== i))
                           }
-                          aria-label={"Remove " + p.name}
+                          aria-label={t("Remove " + p.name, "حذف " + p.name)}
                         >
                           <X size={16} />
                         </button>
@@ -497,13 +493,27 @@ function Home() {
                     ))}
                   </ul>
                   <p className="cart-total">
-                    Total <b>${cart.reduce((s, p) => s + p.price, 0)}</b>
+                    {t("Total")}{" "}
+                    <b>
+                      {[...new Set(cart.map((p) => p.currency))]
+                        .map((currency) =>
+                          new Intl.NumberFormat(
+                            lang === "fa" ? "fa-IR" : "en-US",
+                            { style: "currency", currency },
+                          ).format(
+                            cart
+                              .filter((p) => p.currency === currency)
+                              .reduce((sum, p) => sum + p.price, 0),
+                          ),
+                        )
+                        .join(" + ")}
+                    </b>
                   </p>
                 </>
               )}
             </>
           ) : (
-            <p>{modal.description}</p>
+            <p>{t(modal.description)}</p>
           )}
         </Modal>
       )}

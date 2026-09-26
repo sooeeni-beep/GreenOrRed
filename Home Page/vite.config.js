@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { DatabaseSync } from "node:sqlite";
 import { readFileSync, readdirSync, mkdirSync } from "node:fs";
+import { localBucket } from "./server/local-bucket.mjs";
 import { resolve } from "node:path";
 import { handleApi } from "./server/api.mjs";
 function devApi() {
@@ -53,7 +54,12 @@ function devApi() {
                 : {}),
             },
           );
-          const response = await handleApi(request, db, "local-preview-owner");
+          const response = await handleApi(
+            request,
+            db,
+            "local-preview-owner",
+            localBucket,
+          );
           res.statusCode = response.status;
           response.headers.forEach((v, k) => res.setHeader(k, v));
           res.end(await response.text());

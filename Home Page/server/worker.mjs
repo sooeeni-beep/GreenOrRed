@@ -7,6 +7,7 @@ export default {
         request,
         env.DB,
         request.headers.get("oai-authenticated-user-id"),
+        env.BUCKET,
       );
     if (request.method !== "GET" && request.method !== "HEAD")
       return new Response("Method not allowed", { status: 405 });

@@ -1,43 +1,9 @@
 import React, { useState } from "react";
 import { ArrowRight, Play } from "lucide-react";
-import { Asset, AssetButton, More, Rating } from "./components";
-export const products = [
-  {
-    name: "SuperTrend Pro",
-    creator: "TradeTech",
-    price: 49,
-    rating: "4.9",
-    count: 320,
-    badge: "bestseller",
-    category: "Indicators",
-  },
-  {
-    name: "Gold Master EA",
-    creator: "AlgoTrader",
-    price: 79,
-    rating: "4.8",
-    count: 210,
-    badge: "popular",
-    category: "Experts & Strategies",
-  },
-  {
-    name: "Breakout Strategy",
-    creator: "Hydricators",
-    price: 39,
-    rating: "4.7",
-    count: 158,
-    badge: "new",
-    category: "Strategies",
-  },
-  {
-    name: "Support & Resistance",
-    creator: "ChartTools",
-    price: 59,
-    rating: "4.6",
-    count: 120,
-    category: "Indicators",
-  },
-];
+import { Asset, AssetButton, More, Modal } from "./components";
+import { Blocks } from "./Blocks";
+import { useI18n } from "./i18n";
+import { localizedContent } from "../shared/media.mjs";
 export function SectionTitle({ title, description, action, onAction }) {
   return (
     <div className="section-heading">
@@ -54,26 +20,34 @@ export function Tools({ open, t }) {
     [
       "indicators",
       "Indicators",
+      "اندیکاتورها",
       "Professional indicators to analyze markets with precision.",
+      "اندیکاتورهای تخصصی برای تحلیل دقیق بازارها.",
     ],
     [
       "experts",
       "Experts & Strategies",
-      "Automated trading systems with verified AI and strategy results.",
+      "اکسپرت‌ها و استراتژی‌ها",
+      "Automated trading systems and strategy tools.",
+      "سیستم‌های معاملاتی خودکار و ابزارهای استراتژی.",
     ],
     [
       "scripts",
       "Scripts & Utilities",
+      "اسکریپت‌ها و ابزارهای کاربردی",
       "Powerful scripts and utilities to simplify your trading.",
+      "ابزارهایی برای ساده‌ترکردن معاملات شما.",
     ],
     [
       "signals",
       "Trading Signals",
-      "Real-time trading signals from top traders and verified providers.",
+      "سیگنال‌های معاملاتی",
+      "Trading signals from creators and providers.",
+      "سیگنال‌های معاملاتی ارائه‌دهندگان و سازندگان.",
     ],
   ];
   return (
-    <section className="tools">
+    <section>
       <SectionTitle
         title={t("Trading Tools", "ابزارهای معاملاتی")}
         description={t(
@@ -84,18 +58,25 @@ export function Tools({ open, t }) {
         onAction={() => open("Marketplace")}
       />
       <div className="tool-grid">
-        {cards.map(([id, title, desc]) => (
-          <button className="tool-card" onClick={() => open(title)} key={id}>
+        {cards.map(([id, title, fa, desc, descFa]) => (
+          <button
+            className="tool-card"
+            onClick={() => open(t(title, fa))}
+            key={id}
+          >
             <Asset
               name={id + "-chart"}
               className="tool-preview"
-              alt={title + " interface preview"}
+              alt={t(
+                "Illustrative interface preview",
+                "تصویر نمونهٔ رابط کاربری",
+              )}
             />
             <div className="tool-description">
               <Asset name={id + "-icon"} className="tool-icon" />
               <div>
-                <h3>{title}</h3>
-                <p>{desc}</p>
+                <h3>{t(title, fa)}</h3>
+                <p>{t(desc, descFa)}</p>
               </div>
               <Asset name="tool-arrow" className="tiny-arrow" />
             </div>
@@ -106,6 +87,22 @@ export function Tools({ open, t }) {
   );
 }
 export function Developers({ module, open, t }) {
+  const lists = {
+    affiliate: [
+      ["High commission rates", "نرخ همکاری مناسب"],
+      ["Track referrals", "پیگیری معرفی‌ها"],
+      ["Track earnings", "پیگیری درآمد"],
+      ["Grow together", "رشد همراه یکدیگر"],
+    ],
+    requests: [
+      [
+        "Get it built by our team or the community",
+        "ساخت توسط تیم ما یا توسعه‌دهندگان",
+      ],
+      ["Compare offers from developers", "مقایسهٔ پیشنهادهای توسعه‌دهندگان"],
+      ["Track progress and communicate easily", "پیگیری پیشرفت و ارتباط آسان"],
+    ],
+  };
   return (
     <section>
       <SectionTitle
@@ -114,75 +111,95 @@ export function Developers({ module, open, t }) {
           "ابزارت را بساز. کسب‌وکارت را رشد بده.",
         )}
         description={t(
-          "Create. Collaborate. Earn. Be part of something bigger.",
+          "Create. Collaborate. Earn.",
           "بسازید، همکاری کنید و درآمد داشته باشید.",
         )}
         action={t("See All Opportunities", "همهٔ فرصت‌ها")}
-        onAction={() => open("Developer opportunities")}
+        onAction={() =>
+          open(t("Developer opportunities", "فرصت‌های توسعه‌دهندگان"))
+        }
       />
       <div className="business-grid">
-        {module.blocks.includes("affiliate") && (
-          <article className="business-card affiliate">
-            <Asset name="affiliate-icon" className="business-icon" />
-            <div className="business-copy">
-              <h3>Affiliate Program</h3>
-              <p>You trade, we connect. Earn by sharing great tools.</p>
-              <ul>
-                {[
-                  "High commission rates",
-                  "Real-time reviewing",
-                  "Real-time tracking",
-                  "Grow together",
-                ].map((x) => (
-                  <li key={x}>
-                    <Asset name="affiliate-check" />
-                    {x}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="business-art">
-              <Asset name="affiliate-chart" />
-              <AssetButton
-                name="affiliate-cta"
-                label="Join Affiliate Program"
-                onClick={() => open("Affiliate Program")}
+        {["affiliate", "requests"]
+          .filter((id) => module.blocks.includes(id))
+          .map((id) => (
+            <article
+              className={
+                "business-card " +
+                (id === "affiliate" ? "affiliate" : "requests")
+              }
+              key={id}
+            >
+              <Asset
+                name={id === "affiliate" ? "affiliate-icon" : "request-paper"}
+                className="business-icon"
               />
-            </div>
-          </article>
-        )}
-        {module.blocks.includes("requests") && (
-          <article className="business-card requests">
-            <Asset name="request-paper" className="business-icon" />
-            <div className="business-copy">
-              <h3>Custom Requests</h3>
-              <p>Need a specific indicator or EA? Submit your request.</p>
-              <ul>
-                {[
-                  "Get it built by our team or the community",
-                  "Competitive offers from verified developers",
-                  "Track progress and communicate easily",
-                ].map((x) => (
-                  <li key={x}>
-                    <Asset name="request-check" />
-                    {x}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="business-art">
-              <Asset name="request-monitor" />
-              <AssetButton
-                name="request-cta"
-                label="Submit a Request"
-                onClick={() => open("Custom Requests")}
-              />
-            </div>
-          </article>
-        )}
+              <div className="business-copy">
+                <h3>
+                  {t(
+                    id === "affiliate"
+                      ? "Affiliate Program"
+                      : "Custom Requests",
+                  )}
+                </h3>
+                <p>
+                  {id === "affiliate"
+                    ? t(
+                        "You trade, we connect. Earn by sharing great tools.",
+                        "با معرفی ابزارهای کاربردی درآمد کسب کنید.",
+                      )
+                    : t(
+                        "Need a specific indicator or EA? Submit your request.",
+                        "اندیکاتور یا اکسپرت اختصاصی می‌خواهید؟ درخواست دهید.",
+                      )}
+                </p>
+                <ul>
+                  {lists[id].map(([en, fa]) => (
+                    <li key={en}>
+                      <Asset
+                        name={
+                          id === "affiliate"
+                            ? "affiliate-check"
+                            : "request-check"
+                        }
+                      />
+                      {t(en, fa)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="business-art">
+                <Asset
+                  name={
+                    id === "affiliate" ? "affiliate-chart" : "request-monitor"
+                  }
+                />
+                <AssetButton
+                  name={id === "affiliate" ? "affiliate-cta" : "request-cta"}
+                  label={
+                    id === "affiliate"
+                      ? "Join Affiliate Program"
+                      : "Submit a Request"
+                  }
+                  onClick={() =>
+                    open(
+                      id === "affiliate"
+                        ? "Affiliate Program"
+                        : "Custom Requests",
+                    )
+                  }
+                />
+              </div>
+            </article>
+          ))}
       </div>
       {module.blocks.length === 0 && (
-        <p className="empty">No opportunities are currently displayed.</p>
+        <p className="empty">
+          {t(
+            "No opportunities are currently displayed.",
+            "در حال حاضر فرصتی برای نمایش وجود ندارد.",
+          )}
+        </p>
       )}
     </section>
   );
@@ -204,11 +221,12 @@ export function Education({ open, t }) {
         <article className="education-panel">
           <Asset name="education-cap" />
           <div>
-            <h3>Education</h3>
+            <h3>{t("Education")}</h3>
             <p>
-              Learn from professional traders and industry experts. Live or
-              on-demand courses, webinars, and practical trading education for
-              all levels.
+              {t(
+                "Learn from professional traders and industry experts. Courses, webinars and practical trading education for all levels.",
+                "از معامله‌گران و متخصصان حرفه‌ای یاد بگیرید؛ دوره‌ها، وبینارها و آموزش عملی برای تمام سطوح.",
+              )}
             </p>
             <AssetButton
               name="education-cta"
@@ -219,114 +237,127 @@ export function Education({ open, t }) {
         </article>
         <div className="educators">
           <div className="sub-heading">
-            <h3>Top Educators</h3>
-            <More onClick={() => open("Educators")}>View All</More>
+            <h3>{t("Top Educators")}</h3>
           </div>
-          <div className="educator-grid">
-            {[
-              ["alex", "Alex T.", "4.9", 200, "125"],
-              ["sara", "Sara K.", "4.8", 300, "980"],
-              ["david", "David M.", "4.7", 120, "450"],
-            ].map(([id, name, rating, count, students]) => (
-              <article className="educator-card" key={id}>
-                <div className="educator-info">
-                  <Asset name={id} alt={name} className="avatar" />
-                  <div>
-                    <h4>{name}</h4>
-                    <Rating {...{ rating, count }} />
-                    <small>{students} Students</small>
-                  </div>
-                </div>
-                <AssetButton
-                  name="profile-cta"
-                  label={"View " + name + " profile"}
-                  onClick={() => open(name + " — educator profile")}
-                />
-              </article>
-            ))}
-          </div>
+          <p className="empty">
+            {t(
+              "Educator profiles will appear after they are published.",
+              "پروفایل مدرسان پس از انتشار در این بخش نمایش داده می‌شود.",
+            )}
+          </p>
         </div>
-        <div className="education-banner">
-          <Asset
-            name="education-banner"
-            alt="Invest in Your Knowledge. Trade in Your Future. Books and a plant."
-          />
+        <div className="education-banner localized-banner">
+          <h3>
+            {t(
+              "Invest in your knowledge. Trade in your future.",
+              "روی دانشت سرمایه‌گذاری کن؛ آینده‌ات را بساز.",
+            )}
+          </h3>
+          <div className="book-art">
+            <Asset
+              name="education-banner"
+              alt={t("Books and a plant", "کتاب‌ها و گیاه")}
+            />
+          </div>
           <AssetButton
             name="learning-cta"
             label="Start Learning Today"
-            onClick={() => open("Learning centre")}
+            onClick={() => open("Education")}
           />
         </div>
       </div>
     </section>
   );
 }
-const videos = [
-  [
-    "EURUSD Analysis: Key Levels and What’s Next?",
-    "MarketMind",
-    "10K views · 2 days ago",
-  ],
-  [
-    "Live Trading Session Q&A + Live Trades",
-    "TradersWay",
-    "2.6K views · 3 days ago",
-  ],
-  [
-    "My Simple Trading Strategy (Full Guide)",
-    "ChartPros",
-    "25K views · 5 days ago",
-  ],
-  [
-    "Risk Management Every Trader Needs",
-    "AlgoFamous",
-    "8.1K views · 1 week ago",
-  ],
-  [
-    "Trading Psychology Mindset for Success",
-    "MindfulTrader",
-    "12K views · 1 week ago",
-  ],
-];
-export function Videos({ open, t }) {
+function ContentCopy({ item }) {
+  const { lang, t } = useI18n();
+  const [original, setOriginal] = useState(false);
+  const title = localizedContent(item, "title", lang),
+    desc = localizedContent(item, "description", lang);
+  return (
+    <div className="content-copy">
+      <h3>{original ? item.title : title.text}</h3>
+      {(original ? item.description : desc.text) && (
+        <p>{original ? item.description : desc.text}</p>
+      )}
+      {(title.missing || desc.missing) && (
+        <small className="translation-note">
+          {t(
+            "Translation is not ready; original text is shown.",
+            "ترجمه هنوز آماده نیست؛ متن اصلی نمایش داده می‌شود.",
+          )}
+        </small>
+      )}
+      {lang !== item.originalLanguage && !title.missing && (
+        <button
+          className="original-toggle"
+          onClick={() => setOriginal(!original)}
+        >
+          {original
+            ? t("Show translation", "نمایش ترجمه")
+            : t("Show original", "نمایش متن اصلی")}
+        </button>
+      )}
+    </div>
+  );
+}
+export function Videos({ content = [], open, t }) {
+  const [video, setVideo] = useState(null);
+  const list = content.filter((c) => c.kind === "video");
   return (
     <section>
       <SectionTitle
-        title="TradeTube"
-        description="Watch. Learn. Share. Go Live."
-        action={t("View All Videos", "همهٔ ویدئوها")}
-        onAction={() => open("TradeTube")}
+        title={t("TradeTube")}
+        description={t(
+          "Watch. Learn. Share. Go Live.",
+          "ببینید، یاد بگیرید، به اشتراک بگذارید و زنده پخش کنید.",
+        )}
       />
-      <div className="video-grid">
-        {videos.map(([title, name, meta], i) => (
-          <button
-            className="video-card"
-            key={title}
-            onClick={() =>
-              open(
-                title,
-                "This is a thumbnail from the supplied design. A playable video has not been provided yet.",
-              )
-            }
-          >
-            <div className="video-thumb">
-              <Asset name={"video-" + (i + 1)} alt={title} />
-              {i === 1 && <Asset name="live" className="live-badge" />}
-            </div>
-            <h3>{title}</h3>
-            <div className="creator">
-              <Asset
-                name={i === 0 ? "marketmind" : "creator-" + i}
-                className="avatar"
-              />
-              <div>
-                {name}
-                <small>{meta}</small>
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
+      {!list.length ? (
+        <p className="empty catalog-empty">
+          {t(
+            "No videos have been published yet.",
+            "هنوز ویدئویی منتشر نشده است.",
+          )}
+        </p>
+      ) : (
+        <div className="video-grid real-videos">
+          {list.map((v) => (
+            <article className="video-card" key={v.id}>
+              <button
+                className="video-thumb"
+                onClick={() =>
+                  v.video
+                    ? setVideo(v)
+                    : v.url
+                      ? location.assign(v.url)
+                      : open(t(v.title, v.titleFa))
+                }
+              >
+                <img src={v.image} alt={t(v.title, v.titleFa)} />
+                <Play size={26} />
+              </button>
+              <ContentCopy item={v} />
+              <div className="creator">{v.creator}</div>
+            </article>
+          ))}
+        </div>
+      )}
+      {video && (
+        <Modal
+          title={t(video.title, video.titleFa)}
+          onClose={() => setVideo(null)}
+        >
+          <video
+            src={video.video}
+            poster={video.image}
+            controls
+            autoPlay
+            playsInline
+            className="expanded-video"
+          />
+        </Modal>
+      )}
     </section>
   );
 }
@@ -338,31 +369,37 @@ export function Journal({ module, open, t }) {
           <h2>{t(module.title, module.titleFa)}</h2>
           <p>
             {t(module.description, module.descriptionFa)}{" "}
-            <Asset name="free-badge" className="free-badge" />
+            <span className="free-label">{t("100% Free", "۱۰۰٪ رایگان")}</span>
           </p>
           <div className="journal-features">
             {[
               [
                 "insights",
                 "AI-Powered Insights",
-                "Get personalized insights from your trades.",
+                "بینش‌های هوشمند",
+                "Understand your trading patterns.",
+                "الگوهای معاملاتی خود را بشناسید.",
               ],
               [
                 "analytics",
                 "Performance Analytics",
+                "تحلیل عملکرد",
                 "Discover your strengths and weaknesses.",
+                "نقاط قوت و ضعف خود را کشف کنید.",
               ],
               [
                 "goals",
                 "Set & Achieve Goals",
+                "تعیین هدف و پیگیری آن",
                 "Build better habits and track your progress.",
+                "عادت‌های بهتر بسازید و پیشرفتتان را دنبال کنید.",
               ],
-            ].map(([id, title, desc]) => (
+            ].map(([id, en, fa, desc, descFa]) => (
               <div key={id}>
                 <Asset name={id} />
                 <div>
-                  <h3>{title}</h3>
-                  <p>{desc}</p>
+                  <h3>{t(en, fa)}</h3>
+                  <p>{t(desc, descFa)}</p>
                 </div>
               </div>
             ))}
@@ -373,64 +410,47 @@ export function Journal({ module, open, t }) {
             onClick={() => open("Trading Journal")}
           />
         </div>
-        <Asset
-          name="journal-devices"
-          className="journal-device"
-          alt="Trading journal dashboard on a tablet and phone"
-        />
+        <figure className="journal-figure">
+          <Asset
+            name="journal-devices"
+            className="journal-device"
+            alt={t(
+              "Illustrative journal interface",
+              "تصویر نمونهٔ رابط ژورنال",
+            )}
+          />
+          <figcaption>
+            {t(
+              "Interface preview — not live account data",
+              "نمونهٔ رابط کاربری — دادهٔ حساب واقعی نیست",
+            )}
+          </figcaption>
+        </figure>
         <div className="leaderboard">
-          <div className="sub-heading">
-            <h3>
-              Top Journal Traders <span>(Last 30 Days)</span>
-            </h3>
-            <More onClick={() => open("Journal leaderboard")}>View All</More>
-          </div>
-          {[
-            "ShadowTrader",
-            "PriceActionPro",
-            "ChartMaster",
-            "AlgoNomad",
-            "PipHunter",
-          ].map((name, i) => (
-            <div className="leader" key={name}>
-              <b>{i + 1}</b>
-              <Asset name={"leader-" + (i + 1)} className="avatar" />
-              <strong>{name}</strong>
-              <svg className="sparkline" viewBox="0 0 76 24" aria-hidden="true">
-                <path
-                  d={
-                    [
-                      "M1 21L8 19L14 20L22 15L28 16L33 11L39 13L46 8L53 9L59 5L66 6L75 1",
-                      "M1 23L9 19L16 19L24 17L31 18L38 13L46 14L52 9L60 10L66 5L75 2",
-                    ][i % 2]
-                  }
-                />
-              </svg>
-              <span
-                className="return"
-                style={{ backgroundImage: "url(/assets/return-badge.webp)" }}
-              >
-                +{["42.8", "37.6", "33.1", "28.9", "26.4"][i]}%
-              </span>
-            </div>
-          ))}
-          <span className="demo-data">
-            {t("Illustrative demo data", "داده‌های نمایشی")}
-          </span>
+          <h3>{t("Top Journal Traders", "معامله‌گران برتر ژورنال")}</h3>
+          <p className="empty">
+            {t(
+              "Rankings will appear when verified journal data is available.",
+              "رتبه‌بندی پس از در دسترس بودن دادهٔ معتبر ژورنال نمایش داده می‌شود.",
+            )}
+          </p>
         </div>
       </div>
     </section>
   );
 }
-export function Products({ module, open, addToCart, query, t }) {
-  const [tab, setTab] = useState("Top Rated");
-  let list = [...products];
-  if (tab === "Best Sellers") list.sort((a, b) => b.count - a.count);
-  if (tab === "New Arrivals")
-    list.sort((a, b) => (b.badge === "new") - (a.badge === "new"));
+export function Products({ module, content = [], open, addToCart, query, t }) {
+  const { lang } = useI18n();
+  const [tab, setTab] = useState("newest");
+  let list = content.filter((c) => c.kind === "product");
+  list = [...list].sort((a, b) =>
+    tab === "price"
+      ? a.currency.localeCompare(b.currency) || a.price - b.price
+      : b.createdAt.localeCompare(a.createdAt),
+  );
   if (query)
     list = list.filter((p) =>
-      (p.name + " " + p.creator + " " + p.category)
+      (p.title + " " + p.titleFa + " " + p.creator + " " + p.category)
         .toLowerCase()
         .includes(query.toLowerCase()),
     );
@@ -441,69 +461,83 @@ export function Products({ module, open, addToCart, query, t }) {
           title={t(module.title, module.titleFa)}
           description={t(module.description, module.descriptionFa)}
         />
-        <div className="tabs" role="tablist" aria-label="Product sorting">
-          {["Top Rated", "Best Sellers", "New Arrivals"].map((x) => (
+        <div
+          className="tabs"
+          role="tablist"
+          aria-label={t("Product sorting", "مرتب‌سازی محصولات")}
+        >
+          {[
+            ["newest", "Newest", "جدیدترین"],
+            ["price", "Price by currency", "قیمت به تفکیک ارز"],
+          ].map(([id, en, fa]) => (
             <button
               role="tab"
-              aria-selected={tab === x}
-              key={x}
-              onClick={() => setTab(x)}
+              aria-selected={tab === id}
+              key={id}
+              onClick={() => setTab(id)}
             >
-              {x}
+              {t(en, fa)}
             </button>
           ))}
         </div>
-        <More onClick={() => open("Marketplace")}>
-          {t("View All Products", "همهٔ محصولات")}
-        </More>
       </div>
       {query && (
         <p className="search-result">
-          {list.length} results for “{query}”
+          {t("Search results for", "نتایج جست‌وجوی")} «{query}»
         </p>
       )}
-      <div className="product-grid">
-        {list.map((p) => (
-          <article className="product-card" key={p.name}>
-            <button
-              className="product-art"
-              onClick={() => open(p.name)}
-              aria-label={"View " + p.name}
-            >
-              <Asset name="product-thumb" alt={p.name + " chart preview"} />
-              {p.badge && <Asset name={p.badge} className="product-badge" />}
-            </button>
-            <div>
-              <button className="product-title" onClick={() => open(p.name)}>
-                {p.name}
-              </button>
-              <p>by {p.creator}</p>
-              <div className="product-meta">
-                <strong>${p.price}</strong>
-                <Rating rating={p.rating} count={p.count} />
-              </div>
-            </div>
-            <button
-              className="cart-add"
-              aria-label={"Add " + p.name + " to demo cart"}
-              onClick={() => addToCart(p)}
-            >
-              <Asset name="cart" />
-            </button>
-          </article>
-        ))}
-      </div>
-      {list.length === 0 && (
-        <p className="empty">
-          No products match your search. Try “strategy” or “indicator”.
+      {!list.length ? (
+        <p className="empty catalog-empty">
+          {t(
+            query
+              ? "No products match your search."
+              : "No products have been published yet.",
+            query
+              ? "محصولی مطابق جست‌وجوی شما وجود ندارد."
+              : "هنوز محصولی منتشر نشده است.",
+          )}
         </p>
+      ) : (
+        <div className="product-grid">
+          {list.map((p) => (
+            <article className="product-card real-product" key={p.id}>
+              <button
+                className="product-art"
+                onClick={() =>
+                  p.url ? location.assign(p.url) : open(t(p.title, p.titleFa))
+                }
+              >
+                <img src={p.image} alt={t(p.title, p.titleFa)} />
+              </button>
+              <div>
+                <ContentCopy item={p} />
+                <p>
+                  {t("By", "سازنده:")} {p.creator}
+                </p>
+                <strong className="real-price">
+                  {new Intl.NumberFormat(lang === "fa" ? "fa-IR" : "en-US", {
+                    style: "currency",
+                    currency: p.currency,
+                  }).format(p.price)}
+                </strong>
+              </div>
+              <button
+                className="cart-add"
+                aria-label={t("Add to demo cart", "افزودن به سبد آزمایشی")}
+                onClick={() => addToCart({ ...p, name: t(p.title, p.titleFa) })}
+              >
+                <Asset name="cart" />
+              </button>
+            </article>
+          ))}
+        </div>
       )}
     </section>
   );
 }
 export function ModuleContent(props) {
   const { module, open, t } = props;
-  if (module.status === "coming-soon" || module.status === "maintenance")
+  if (["coming-soon", "maintenance"].includes(module.status))
     return (
       <div className="module-notice">
         <h2>{t(module.title, module.titleFa)}</h2>
@@ -528,8 +562,14 @@ export function ModuleContent(props) {
     journal: Journal,
     products: Products,
   };
-  const Component = map[module.type];
-  const readonly = module.status === "read-only";
+  const Component = map[module.type],
+    readonly = module.status === "read-only";
+  const navigate = (b) =>
+    readonly
+      ? open(module.title, "This module is currently read-only.")
+      : b.url
+        ? location.assign(b.url)
+        : open(t(b.title, b.titleFa));
   return (
     <>
       {readonly && (
@@ -556,19 +596,15 @@ export function ModuleContent(props) {
           <h2>{t(module.title, module.titleFa)}</h2>
           <p>{t(module.description, module.descriptionFa)}</p>
           {module.cta && (
-            <button
-              className="primary"
-              onClick={() => {
-                if (module.url && module.status === "active")
-                  location.assign(module.url);
-                else open(module.title);
-              }}
-            >
-              {module.cta}
+            <button className="primary" onClick={() => navigate(module)}>
+              {t(module.cta, module.ctaFa)}
               <ArrowRight size={18} />
             </button>
           )}
         </section>
+      )}
+      {module.contentBlocks?.length > 0 && (
+        <Blocks module={module} onNavigate={navigate} />
       )}
     </>
   );

@@ -28,3 +28,13 @@ Production `npm run build`: successful client bundle and Worker ESM output. D1 s
 This validates homepage behavior and the local persistence adapter. Production deployment status confirms publication; it is not an end-to-end test of financial services. Actual payments, trading, account login, videos and destination pages are not connected. D1 uses the same generated schema and prepared statements; the hosting service applies migrations.
 
 Some assets are reference crops, as listed in README. Text embedded in images remains English, including when the principal interface switches to Persian. No claim of pixel-perfect identity or fully translated image content is made.
+
+## Revision 2 — 2026-09-26
+
+- 12 Node tests pass: existing authorization/persistence/concurrency and accordion behavior, legacy config migration, campaign boundaries and overlap, draft filtering, translation fallback, media upload/type rejection and range/HEAD responses.
+- Browser: Persian desktop UI inspected; mobile 390px frame had clientWidth = scrollWidth = 375px (scrollbar excluded); device decoration remains anchored to devices.
+- Browser: laptop enlargement dialog opens/closes; Hero Persian title saved, reloaded and restored in local development database.
+- Browser: Community starter blocks create and render in preview after fixing ID generation for non-secure local preview contexts. No sample Community block published.
+- Upload backend and byte ranges tested using in-memory storage. Actual production R2 upload, codec compatibility of user-provided videos, paid booking, external market feeds and automatic translation are not claimed verified.
+- Reference fake videos/products/avatars removed from live homepage rendering. Default content lists remain empty until owner supplies genuine records.
+- Build output excludes the local responsive QA iframe harness.
