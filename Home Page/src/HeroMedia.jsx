@@ -3,7 +3,7 @@ import { Maximize2, ArrowRight, Play, ArrowDownLeft } from "lucide-react";
 import { Asset, Modal } from "./components";
 import { useI18n } from "./i18n";
 import { heroDefaults, selectSlot } from "../shared/media.mjs";
-export function MediaPresentation({ item, expanded = false }) {
+export function MediaPresentation({ item, expanded = false, inlineAutoplay = false }) {
   const { t, lang } = useI18n();
   return (
     <div
@@ -13,14 +13,15 @@ export function MediaPresentation({ item, expanded = false }) {
     >
       {item.mode === "video" && item.media ? (
         <video
-          key={item.media}
+          key={`${item.media}:${expanded ? "expanded" : "inline"}:${inlineAutoplay ? "autoplay" : "still"}`}
           src={item.media}
           poster={item.poster || undefined}
           controls={expanded}
           muted={!expanded}
-          autoPlay={expanded}
+          autoPlay={expanded || inlineAutoplay}
+          loop={inlineAutoplay && !expanded}
           playsInline
-          preload="metadata"
+          preload={expanded || inlineAutoplay ? "metadata" : "none"}
         />
       ) : item.mode === "image" && item.media ? (
         <img src={item.media} alt={t(item.title, item.titleFa)} />
@@ -105,7 +106,10 @@ export default function HeroMedia({ hero = heroDefaults }) {
           const item = selectSlot(hero, slot, now);
           return (
             <div className={"device-media " + slot + "-media"} key={slot}>
-              <MediaPresentation item={item} />
+              <MediaPresentation
+                item={item}
+                inlineAutoplay={slot === "laptop" && zoom !== "laptop"}
+              />
               <button
                 className="media-enlarge"
                 onClick={() => setZoom(slot)}
@@ -118,7 +122,7 @@ export default function HeroMedia({ hero = heroDefaults }) {
               >
                 <Maximize2 size={16} />
               </button>
-              {item.mode === "video" && (
+              {item.mode === "video" && slot !== "laptop" && (
                 <span className="media-play-hint">
                   <Play size={24} />
                 </span>
