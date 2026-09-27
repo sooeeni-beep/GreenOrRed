@@ -262,3 +262,7 @@ Migration جدید با `npm run db:generate` ساخته و بازبینی می�
 ## ۱۴. انطباق دقیق نمایشگر موبایل — ۲۷ سپتامبر ۲۰۲۶
 
 محدودهٔ نمایشگر از تصویر اصلی 1713×758 اندازه‌گذاری شد: x=1206، y=210، عرض=259، ارتفاع=527. مختصات درصدی با تغییر اندازهٔ قاب مقیاس می‌شوند. به‌جای گوشهٔ گرد عمومی، مسیر برش اختصاصی با گوشه‌ها و بریدگی دوربین بالای نمایشگر استفاده می‌شود تا محتوا روی قاب و ناچ قرار نگیرد.
+
+## 15. Featured Products selector
+- Restore reference tabs: Top Rated / Best Sellers / New Arrivals, with Persian labels, equal widths and compact padding. Center the group within the section; on narrower screens place it on its own centered row.
+- New Arrivals sorts real published products by creation date. Top Rated and Best Sellers remain honest empty ranking states until verified review/order data is connected; no synthetic ratings or sales are inferred.

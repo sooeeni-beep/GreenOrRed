@@ -441,13 +441,13 @@ export function Journal({ module, open, t }) {
 }
 export function Products({ module, content = [], open, addToCart, query, t }) {
   const { lang } = useI18n();
-  const [tab, setTab] = useState("newest");
+  const [tab, setTab] = useState("top-rated");
   let list = content.filter((c) => c.kind === "product");
-  list = [...list].sort((a, b) =>
-    tab === "price"
-      ? a.currency.localeCompare(b.currency) || a.price - b.price
-      : b.createdAt.localeCompare(a.createdAt),
-  );
+  // Ranking data must come from verified reviews/orders, never sample figures.
+  const rankingPending = tab !== "newest" && list.length > 0;
+  list = tab === "newest"
+    ? [...list].sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    : [];
   if (query)
     list = list.filter((p) =>
       (p.title + " " + p.titleFa + " " + p.creator + " " + p.category)
@@ -467,8 +467,9 @@ export function Products({ module, content = [], open, addToCart, query, t }) {
           aria-label={t("Product sorting", "مرتب‌سازی محصولات")}
         >
           {[
-            ["newest", "Newest", "جدیدترین"],
-            ["price", "Price by currency", "قیمت به تفکیک ارز"],
+            ["top-rated", "Top Rated", "بالاترین امتیاز"],
+            ["best-sellers", "Best Sellers", "پرفروش‌ترین‌ها"],
+            ["newest", "New Arrivals", "تازه‌ها"],
           ].map(([id, en, fa]) => (
             <button
               role="tab"
@@ -489,10 +490,14 @@ export function Products({ module, content = [], open, addToCart, query, t }) {
       {!list.length ? (
         <p className="empty catalog-empty">
           {t(
-            query
+            rankingPending
+              ? "Rankings will appear when verified reviews and sales are available. Browse New Arrivals to see published products."
+              : query
               ? "No products match your search."
               : "No products have been published yet.",
-            query
+            rankingPending
+              ? "رتبه‌بندی پس از دریافت امتیازها و فروش تأییدشده نمایش داده می‌شود. محصولات منتشرشده را در بخش تازه‌ها ببینید."
+              : query
               ? "محصولی مطابق جست‌وجوی شما وجود ندارد."
               : "هنوز محصولی منتشر نشده است.",
           )}
