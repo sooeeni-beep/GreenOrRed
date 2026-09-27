@@ -275,3 +275,6 @@ The Affiliate icon, copy and chart/CTA occupy independent grid tracks instead of
 
 ## 18. Matching business cards
 Custom Requests shares the Affiliate grid and responsive artwork placement. Both CTAs use the same width (170px desktop / 200px narrow cards) and 38px height. Original artwork and individual card colors remain unchanged.
+
+## 19. Trading Tools text containment
+All four category cards permit title/description wrapping, unlike single-line CTA buttons. Flexible text columns have min-width:0; icons retain their size, cards grow with content, and a separate bottom inset reserves space for the navigation arrow in both writing directions.

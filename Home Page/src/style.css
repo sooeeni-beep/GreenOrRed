@@ -4461,3 +4461,13 @@ button,
   :is(.affiliate, .requests) .business-art > .asset { width:140px; height:98px; }
   :is(.affiliate, .requests) .business-art .image-button { width:200px; }
 }
+
+/* Category cards contain prose: do not inherit single-line CTA styling. */
+.tool-card { white-space:normal; min-width:0; height:auto; }
+.tool-description { align-items:flex-start; padding-bottom:32px; }
+.tool-description > div { flex:1; min-width:0; }
+.tool-description h3, .tool-description p { white-space:normal; overflow-wrap:anywhere; }
+.tool-description h3 { line-height:1.3; }
+.tool-description p { line-height:1.45; margin-top:3px; }
+.tool-description .tool-icon { flex-shrink:0; }
+.tool-description .tiny-arrow { inset-inline-end:2px; inset-inline-start:auto; }
