@@ -278,3 +278,6 @@ Custom Requests shares the Affiliate grid and responsive artwork placement. Both
 
 ## 19. Trading Tools text containment
 All four category cards permit title/description wrapping, unlike single-line CTA buttons. Flexible text columns have min-width:0; icons retain their size, cards grow with content, and a separate bottom inset reserves space for the navigation arrow in both writing directions.
+
+## 20. Education layout and original banner
+Restore the complete education-banner asset with its English handwriting in all locales until localized image assets are provided. Remove the translated heading and clipping mask. Keep the live translated CTA at the bottom of the banner. Education, educator profiles and artwork use separate responsive grid tracks; published educator profiles remain pending real data.

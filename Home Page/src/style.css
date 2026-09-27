@@ -4471,3 +4471,28 @@ button,
 .tool-description p { line-height:1.45; margin-top:3px; }
 .tool-description .tool-icon { flex-shrink:0; }
 .tool-description .tiny-arrow { inset-inline-end:2px; inset-inline-start:auto; }
+
+/* Original education artwork remains intact in every locale. */
+.education-layout { grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr); gap:16px; align-items:stretch; }
+.education-layout > * { min-width:0; }
+.education-panel { display:grid; grid-template-columns:64px minmax(0,1fr); gap:14px; padding:16px; align-items:start; }
+.education-panel > .asset { width:64px; height:64px; object-fit:contain; }
+.education-panel > div { min-width:0; display:flex; flex-direction:column; align-items:flex-start; height:100%; }
+.education-panel p { font-size:14px; line-height:1.5; margin:6px 0 14px; }
+.education-panel .image-button { position:static; width:190px; min-width:0; max-width:100%; height:38px; margin-top:auto; padding-inline:8px; font-size:12px; }
+.educators { padding:12px; border:1px solid var(--line); border-radius:5px; }
+.educators .empty { margin:14px 0 0; line-height:1.5; }
+.education-banner.original-education-banner { padding:0; min-height:0; align-self:center; width:100%; }
+.original-education-banner > .asset { width:100%; height:auto; display:block; object-fit:contain; clip-path:none; }
+.original-education-banner .image-button { position:absolute; inset-inline-start:8px; inset-inline-end:auto; bottom:8px; width:180px; min-width:0; max-width:calc(100% - 16px); height:34px; padding-inline:8px; font-size:12px; margin:0; }
+@media(max-width:1100px) {
+  .education-layout { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .education-banner.original-education-banner { grid-column:1 / -1; max-width:420px; justify-self:center; }
+}
+@media(max-width:600px) {
+  .education-layout { grid-template-columns:minmax(0,1fr); gap:14px; }
+  .education-panel { grid-template-columns:52px minmax(0,1fr); padding:14px; gap:12px; }
+  .education-panel > .asset { width:52px; height:56px; }
+  .education-panel h3 { font-size:20px; }
+  .education-banner.original-education-banner { grid-column:auto; }
+}

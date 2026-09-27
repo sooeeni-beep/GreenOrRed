@@ -246,19 +246,11 @@ export function Education({ open, t }) {
             )}
           </p>
         </div>
-        <div className="education-banner localized-banner">
-          <h3>
-            {t(
-              "Invest in your knowledge. Trade in your future.",
-              "روی دانشت سرمایه‌گذاری کن؛ آینده‌ات را بساز.",
-            )}
-          </h3>
-          <div className="book-art">
-            <Asset
-              name="education-banner"
-              alt={t("Books and a plant", "کتاب‌ها و گیاه")}
-            />
-          </div>
+        <div className="education-banner original-education-banner">
+          <Asset
+            name="education-banner"
+            alt="Invest in Your Knowledge. Trade in Your Future."
+          />
           <AssetButton
             name="learning-cta"
             label="Start Learning Today"
