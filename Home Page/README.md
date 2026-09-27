@@ -272,3 +272,6 @@ At widths up to 800px, the four navigation groups use a vertical accordion ancho
 
 ## 17. Affiliate card layout
 The Affiliate icon, copy and chart/CTA occupy independent grid tracks instead of absolute overlays. The chart is centered above its button. On narrow cards the chart and CTA move to a centered full-width row below the copy; original assets and single-line button labels are preserved, including RTL.
+
+## 18. Matching business cards
+Custom Requests shares the Affiliate grid and responsive artwork placement. Both CTAs use the same width (170px desktop / 200px narrow cards) and 38px height. Original artwork and individual card colors remain unchanged.
