@@ -4031,9 +4031,6 @@ dialog:has(.enlarged) {
 [dir="rtl"] .footer-test {
   direction: rtl;
 }
-.hero-shell {
-  clip-path: polygon(0 0, 78% 0, 78% 23%, 86.9% 23%, 86.9% 100%, 0 100%);
-}
 .hero-callout {
   position: absolute;
   right: 0;

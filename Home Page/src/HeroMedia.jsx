@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Maximize2, ArrowRight, Play, ArrowDownLeft } from "lucide-react";
+import { Maximize2, ArrowRight, Play } from "lucide-react";
 import { Asset, Modal } from "./components";
 import { useI18n } from "./i18n";
 import { heroDefaults, selectSlot } from "../shared/media.mjs";
@@ -87,13 +87,6 @@ export default function HeroMedia({ hero = heroDefaults }) {
     <>
       <div className="hero-devices">
         <Asset name="hero-decoration" className="hero-decoration" />
-        <div className="hero-callout">
-          {t("Your trading journey matters", "مسیر معاملاتی تو اهمیت دارد")}
-          <ArrowDownLeft />
-        </div>
-        <div className="hero-callout bottom">
-          {t("Trade. Learn. Grow together.", "معامله، یادگیری، رشد با هم")}
-        </div>
         <Asset
           name="hero-shell"
           alt={t(
