@@ -4406,3 +4406,7 @@ button,
     margin-top: 3px;
   }
 }
+/* Phone screen uses the same light ground as the header brand. */
+.phone-media .media-presentation { background: #faf9f4; color: #073d30; }
+.phone-media .media-intro h2 { color: #073d30; }
+.phone-media .media-intro p { color: #52635b; }
