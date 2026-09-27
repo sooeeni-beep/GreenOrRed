@@ -266,3 +266,6 @@ Migration جدید با `npm run db:generate` ساخته و بازبینی می�
 ## 15. Featured Products selector
 - Restore reference tabs: Top Rated / Best Sellers / New Arrivals, with Persian labels, equal widths and compact padding. Center the group within the section; on narrower screens place it on its own centered row.
 - New Arrivals sorts real published products by creation date. Top Rated and Best Sellers remain honest empty ranking states until verified review/order data is connected; no synthetic ratings or sales are inferred.
+
+## 16. Mobile header navigation
+At widths up to 800px, the four navigation groups use a vertical accordion anchored below the header. Expanded links remain in normal flow, with viewport-limited scrolling, touch-friendly rows, and RTL-aware alignment. Desktop dropdowns keep their existing layout.
