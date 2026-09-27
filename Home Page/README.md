@@ -269,3 +269,6 @@ Migration جدید با `npm run db:generate` ساخته و بازبینی می�
 
 ## 16. Mobile header navigation
 At widths up to 800px, the four navigation groups use a vertical accordion anchored below the header. Expanded links remain in normal flow, with viewport-limited scrolling, touch-friendly rows, and RTL-aware alignment. Desktop dropdowns keep their existing layout.
+
+## 17. Affiliate card layout
+The Affiliate icon, copy and chart/CTA occupy independent grid tracks instead of absolute overlays. The chart is centered above its button. On narrow cards the chart and CTA move to a centered full-width row below the copy; original assets and single-line button labels are preserved, including RTL.

@@ -4437,3 +4437,27 @@ button,
   .header-inner .nav-dropdown { position:static; width:100%; margin:0 0 8px; padding:4px; box-sizing:border-box; }
   .header-inner .nav-dropdown a { min-height:44px; display:flex; align-items:center; padding:10px 12px; white-space:normal; overflow-wrap:anywhere; text-align:start; }
 }
+
+/* Affiliate content and artwork have separate layout tracks, never overlays. */
+.business-card.affiliate {
+  display:grid; grid-template-columns:56px minmax(0,1fr) 170px;
+  align-items:center; gap:14px; padding:18px; min-height:180px;
+}
+.affiliate .business-icon { width:56px; height:64px; align-self:start; }
+.affiliate .business-copy h3 { font-size:20px; line-height:1.2; }
+.affiliate .business-copy > p { white-space:normal; padding-inline-end:0; font-size:13px; line-height:1.5; margin:6px 0 12px; }
+.affiliate .business-copy ul { grid-template-columns:1fr; gap:7px; max-width:none; }
+.affiliate .business-copy li { white-space:normal; font-size:12px; line-height:1.4; }
+.affiliate .business-copy li img { flex-shrink:0; }
+.affiliate .business-art { position:static; inset:auto; width:100%; align-self:center; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center; }
+.affiliate .business-art > .asset { width:140px; height:98px; max-width:100%; object-fit:contain; margin:0; }
+.affiliate .business-art .image-button { width:100%; min-width:0; max-width:100%; justify-content:center; font-size:12px; padding-inline:8px; }
+[dir="rtl"] .affiliate .business-art > .asset { margin:0; }
+[dir="rtl"] .affiliate .business-copy > p { padding-inline-end:0; }
+@media (min-width:801px) and (max-width:1100px), (max-width:540px) {
+  .business-card.affiliate { grid-template-columns:48px minmax(0,1fr); gap:12px; padding:16px; min-height:0; }
+  .affiliate .business-icon { width:48px; height:56px; }
+  .affiliate .business-art { grid-column:1 / -1; width:100%; padding-top:4px; }
+  .affiliate .business-art > .asset { width:140px; height:98px; }
+  .affiliate .business-art .image-button { width:200px; }
+}
