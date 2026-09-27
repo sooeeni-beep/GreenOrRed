@@ -40,6 +40,7 @@ export const slotSchema = z.object({
   descriptionFa: text,
   media: mediaUrl.default(""),
   poster: mediaUrl.default(""),
+  previewMedia: mediaUrl.default(""),
   cta: text,
   ctaFa: text,
   url: localUrl.default(""),

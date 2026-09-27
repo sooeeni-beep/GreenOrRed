@@ -4259,3 +4259,150 @@ dialog:has(.enlarged) {
     font-size: 8px;
   }
 }
+/* Review: match the supplied device, keep action labels on one line. */
+.phone-media {
+  border-radius: 7% / 3.5%;
+}
+.media-intro .brand-mark {
+  display: block;
+  flex: none;
+  width: 64px;
+  height: 40px;
+  overflow: hidden;
+  direction: ltr;
+  position: relative;
+}
+.media-intro .brand-mark img {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 224px;
+  max-width: none;
+  height: 40px;
+  object-fit: contain;
+}
+.phone-media .media-intro .brand-mark {
+  width: 40px;
+  height: 25px;
+  max-width: 100%;
+}
+.phone-media .media-intro .brand-mark img {
+  width: 140px;
+  height: 25px;
+}
+button,
+.primary,
+.text-cta span {
+  white-space: nowrap;
+}
+.path-card,
+.path-card span,
+.path-card small,
+.module-picker button {
+  white-space: normal;
+}
+.hero-actions {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hero-actions .image-button:first-child,
+.hero-actions .image-button:nth-child(2) {
+  width: 185px;
+  min-width: 185px;
+  flex: 0 0 185px;
+}
+.hero-actions .watch {
+  flex: 0 0 auto;
+}
+.text-cta {
+  width: max-content;
+  min-width: max-content;
+  max-width: 100%;
+}
+.nav-group {
+  position: relative;
+}
+.nav-group > button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.nav-dropdown {
+  position: absolute;
+  inset-block-start: calc(100% + 14px);
+  inset-inline-start: 0;
+  z-index: 100;
+  min-width: 225px;
+  padding: 8px;
+  border: 1px solid #d4dfd5;
+  border-radius: 8px;
+  background: #fffef9;
+  box-shadow: 0 12px 32px #002b2026;
+}
+.nav-dropdown[hidden] {
+  display: none;
+}
+.nav-dropdown a {
+  display: block;
+  padding: 12px;
+  color: #093c30;
+  font-size: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 4px;
+}
+.nav-dropdown a:hover,
+.nav-dropdown a:focus-visible {
+  background: #e9f1e7;
+  outline: 2px solid #88b49a;
+}
+.destination-page {
+  padding-block: 70px;
+  min-height: 60vh;
+}
+.destination-page p {
+  margin: 24px 0;
+}
+@media (max-width: 800px) {
+  .nav-group {
+    width: 100%;
+  }
+  .nav-dropdown {
+    position: static;
+    margin-top: 8px;
+    box-shadow: none;
+    min-width: 0;
+  }
+  .nav-group > button {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .hero-actions .image-button:first-child,
+  .hero-actions .image-button:nth-child(2) {
+    width: 185px;
+    min-width: 185px;
+    flex-basis: 185px;
+  }
+  .phone-media .media-intro .brand-mark {
+    width: 28px;
+    height: 17.5px;
+  }
+  .phone-media .media-intro .brand-mark img {
+    width: 98px;
+    height: 17.5px;
+  }
+}
+@media (max-width: 430px) {
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+  .hero-actions .image-button:first-child,
+  .hero-actions .image-button:nth-child(2) {
+    width: 205px;
+    min-width: 205px;
+  }
+  .hero-actions .watch {
+    margin-top: 3px;
+  }
+}

@@ -170,3 +170,5 @@ test("uploaded media survives storage and supports range/HEAD; unsupported paylo
     415,
   );
 });
+
+test('preview covers beginning/middle/end and never exceeds clip duration', async()=>{const {previewSegments}=await import('../shared/preview.mjs');const p=previewSegments(120);assert.equal(p.length,3);assert.equal(p[0].start,0);assert.ok(p[1].start>55&&p[1].start<65);assert.ok(p[2].start>115);assert.ok(p.every(x=>x.end-x.start<=2&&x.end<=120));assert.deepEqual(previewSegments(Infinity),[]);assert.ok(previewSegments(1).every(x=>x.end<=1));});

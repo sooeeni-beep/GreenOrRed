@@ -38,3 +38,10 @@ Some assets are reference crops, as listed in README. Text embedded in images re
 - Upload backend and byte ranges tested using in-memory storage. Actual production R2 upload, codec compatibility of user-provided videos, paid booking, external market feeds and automatic translation are not claimed verified.
 - Reference fake videos/products/avatars removed from live homepage rendering. Default content lists remain empty until owner supplies genuine records.
 - Build output excludes the local responsive QA iframe harness.
+
+## Hero/navigation review — 2026-09-27
+
+- 13 tests pass, including preview segment bounds (beginning/middle/end and short/unknown-duration inputs).
+- Production build passes. Desktop inspected: equal Hero action widths, watch control outside laptop, original brand mark in screen, original handwritten Hero artwork retained.
+- Browser Marketplace click expands submenu with four actual internal hrefs and does not scroll. Mobile 390px harness: clientWidth = scrollWidth = 375px, action text stays on one line.
+- Lightweight `previewMedia` support is implemented; no optimized preview file has been generated for the owner's existing production video. Original-file seek fallback does not guarantee a byte cap. Production media is not replaced by test data.

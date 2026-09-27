@@ -50,6 +50,16 @@ function MediaFields({ item, update, library, onUploaded }) {
           {...{ library, onUploaded }}
         />
       )}
+      {item.mode === "video" && (
+        <UploadField
+          en="Lightweight preview (beginning, middle, end)"
+          fa="پیش‌نمایش سبک (ابتدا، وسط و انتها)"
+          value={item.previewMedia}
+          video
+          onChange={(v) => update("previewMedia", v)}
+          {...{ library, onUploaded }}
+        />
+      )}
       <div className="form-grid">
         <Field
           en="Button · English"

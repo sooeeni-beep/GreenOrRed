@@ -100,6 +100,11 @@ export const configSchema = z
         message: "Approved campaigns overlap in the same slot",
       });
     for (const item of [v.hero.laptop, v.hero.phone, ...v.hero.campaigns]) {
+      if (item.previewMedia && !/\.(mp4|webm)$/.test(item.previewMedia))
+        ctx.addIssue({
+          code: "custom",
+          message: "Invalid media type for preview",
+        });
       if (
         item.media &&
         ((item.mode === "video" && !/\.(mp4|webm)$/.test(item.media)) ||

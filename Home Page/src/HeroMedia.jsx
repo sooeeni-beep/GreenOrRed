@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Maximize2, ArrowRight, Play } from "lucide-react";
+import HeroVideo from "./HeroVideo";
 import { Asset, Modal } from "./components";
 import { useI18n } from "./i18n";
 import { heroDefaults, selectSlot } from "../shared/media.mjs";
-export function MediaPresentation({ item, expanded = false, inlineAutoplay = false }) {
+export function MediaPresentation({
+  item,
+  expanded = false,
+  inlineAutoplay = false,
+}) {
   const { t, lang } = useI18n();
   return (
     <div
@@ -12,23 +17,13 @@ export function MediaPresentation({ item, expanded = false, inlineAutoplay = fal
       }
     >
       {item.mode === "video" && item.media ? (
-        <video
-          key={`${item.media}:${expanded ? "expanded" : "inline"}:${inlineAutoplay ? "autoplay" : "still"}`}
-          src={item.media}
-          poster={item.poster || undefined}
-          controls={expanded}
-          muted={!expanded}
-          autoPlay={expanded || inlineAutoplay}
-          loop={inlineAutoplay && !expanded}
-          playsInline
-          preload={expanded || inlineAutoplay ? "metadata" : "none"}
-        />
+        <HeroVideo item={item} expanded={expanded} autoplay={inlineAutoplay} />
       ) : item.mode === "image" && item.media ? (
         <img src={item.media} alt={t(item.title, item.titleFa)} />
       ) : (
         <div className="media-intro">
-          <span className="media-brand">
-            G<span>/R</span>
+          <span className="media-brand brand-mark">
+            <Asset name="brand" alt="GreenOrRed" />
           </span>
           <h2>
             {item.mode === "market"

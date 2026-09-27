@@ -12,12 +12,20 @@ import { Asset, AssetButton, More, Modal } from "./components";
 import { ModuleContent } from "./sections";
 import { visibleModules, toggleModule } from "../shared/config.mjs";
 import Admin from "./Admin";
+import HeaderNavigation from "./HeaderNavigation";
+import { destination } from "../shared/navigation.mjs";
 import HeroMedia from "./HeroMedia";
 import { I18nProvider, useI18n } from "./i18n";
 export default function App() {
   return (
     <I18nProvider>
-      {location.pathname.startsWith("/admin") ? <Admin /> : <Home />}
+      {location.pathname.startsWith("/admin") ? (
+        <Admin />
+      ) : destination(location.pathname) ? (
+        <DestinationPage />
+      ) : (
+        <Home />
+      )}
     </I18nProvider>
   );
 }
@@ -102,25 +110,7 @@ function Home() {
           <a href="/" className="brand">
             <Asset name="brand" alt="GreenOrRed homepage" />
           </a>
-          <nav
-            className={menu ? "nav open" : "nav"}
-            aria-label={t("Main navigation")}
-          >
-            <button onClick={() => showModule("traders")}>
-              {t("Marketplace", "بازارچه")}
-              <ChevronDown size={12} />
-            </button>
-            <button onClick={() => showModule("educators")}>
-              {t("Education", "آموزش")}
-              <ChevronDown size={12} />
-            </button>
-            <button onClick={() => showModule("journal")}>
-              {t("Trading Journal", "ژورنال معاملاتی")}
-            </button>
-            <button onClick={() => showModule("developers")}>
-              {t("For Developers", "توسعه‌دهندگان")}
-            </button>
-          </nav>
+          <HeaderNavigation mobileOpen={menu} />
           <form className="header-search" onSubmit={submitSearch}>
             <button aria-label={t("Search products")}>
               <Search size={18} />
@@ -516,6 +506,35 @@ function Home() {
           )}
         </Modal>
       )}
+    </>
+  );
+}
+
+function DestinationPage() {
+  const { t } = useI18n();
+  const [, en, fa] = destination(location.pathname);
+  return (
+    <>
+      <header className="site-header">
+        <div className="header-inner">
+          <a href="/" className="brand">
+            <Asset name="brand" alt="GreenOrRed" />
+          </a>
+          <HeaderNavigation mobileOpen={true} />
+        </div>
+      </header>
+      <main className="page destination-page">
+        <h1>{t(en, fa)}</h1>
+        <p>
+          {t(
+            "This service page is under development. No live service is connected yet.",
+            "این صفحه در حال توسعه است و سرویس عملیاتی آن هنوز متصل نشده است.",
+          )}
+        </p>
+        <a href="/" className="primary">
+          {t("Back to homepage", "بازگشت به صفحهٔ اصلی")}
+        </a>
+      </main>
     </>
   );
 }
