@@ -435,12 +435,11 @@ function Home() {
               </button>
             ))}
           </div>
-          <p className="footer-tagline">
-            {t(
-              "Trade Smarter. Grow together.",
-              "هوشمندانه معامله کن. با هم رشد کنیم.",
-            )}
-          </p>
+          <Asset
+            name="footer-tagline"
+            alt="Trade Smarter. Grow together."
+            lang="en"
+          />
         </div>
         <div className="footer-test">
           <span>
