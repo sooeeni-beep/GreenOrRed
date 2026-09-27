@@ -4410,3 +4410,6 @@ button,
 .phone-media .media-presentation { background: #faf9f4; color: #073d30; }
 .phone-media .media-intro h2 { color: #073d30; }
 .phone-media .media-intro p { color: #52635b; }
+
+/* Coordinates measured against the 1713 × 758 supplied shell: x=1206,y=210,w=259,h=527. */
+.phone-media { left:70.4028%; top:27.7045%; width:15.1197%; height:69.5251%; border-radius:0; clip-path:url(#phone-screen-outline); }

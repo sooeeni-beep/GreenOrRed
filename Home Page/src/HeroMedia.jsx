@@ -81,6 +81,7 @@ export default function HeroMedia({ hero = heroDefaults }) {
   return (
     <>
       <div className="hero-devices">
+        <svg width="0" height="0" aria-hidden="true" style={{position:"absolute",pointerEvents:"none"}}><defs><clipPath id="phone-screen-outline" clipPathUnits="objectBoundingBox"><path d="M .12 0 H .235 C .245 0 .247 .008 .247 .02 C .247 .038 .27 .045 .30 .045 H .68 C .71 .045 .735 .038 .735 .02 C .735 .007 .74 0 .75 0 H .88 Q 1 0 1 .063 V .94 Q 1 1 .88 1 H .12 Q 0 1 0 .94 V .063 Q 0 0 .12 0 Z" /></clipPath></defs></svg>
         <Asset name="hero-decoration" className="hero-decoration" />
         <Asset
           name="hero-shell"
