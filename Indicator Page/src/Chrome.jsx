@@ -18,9 +18,9 @@ export function IndicatorHeader({
     <header className="site-header">
       <div className="header-inner">
         <a
-          href="/indicator-preview"
+          href="/"
           className="brand"
-          aria-label={t("Indicator store", "فروشگاه اندیکاتور")}
+          aria-label={t("Home", "خانه")}
         >
           <Asset name="brand" alt="GreenOrRed" />
         </a>

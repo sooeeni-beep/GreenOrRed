@@ -291,7 +291,7 @@ export default function IndicatorPage() {
       />
       <main className="page ind-main" id="indicator-main">
         <div className="ind-breadcrumb">
-          <span>GreenOrRed</span>
+          <a href="/">{t("Home", "خانه")}</a>
           <ChevronRight size={14} />
           <span>{t("Indicators", "اندیکاتورها")}</span>
         </div>

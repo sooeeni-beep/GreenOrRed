@@ -21,7 +21,7 @@ const IndicatorManage = lazy(() => import("../../Indicator Page/src/IndicatorMan
 export default function App() {
   return (
     <I18nProvider>
-      {/^\/indicator-preview(?:\/manage)?\/?$/.test(location.pathname) ? (
+      {(/^\/indicator-preview(?:\/manage)?\/?$/.test(location.pathname) || /^\/marketplace\/indicators\/?$/.test(location.pathname)) ? (
         <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{location.pathname.includes("/manage") ? <IndicatorManage/> : <IndicatorPage/>}</Suspense>
       ) : location.pathname.startsWith("/admin") ? (
         <Admin />
@@ -405,7 +405,7 @@ function Home() {
           <div className="footer-column" key={title}>
             <h3>{t(title)}</h3>
             {links.map((link) => (
-              <button key={link} onClick={() => open(link)}>
+              <button key={link} onClick={() => link === "Indicators" ? location.assign("/marketplace/indicators") : open(link)}>
                 {t(link)}
               </button>
             ))}
