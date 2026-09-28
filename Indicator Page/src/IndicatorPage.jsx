@@ -1,0 +1,789 @@
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  ArrowRight,
+  Search,
+  Heart,
+  LayoutGrid,
+  List,
+  SlidersHorizontal,
+  X,
+  Layers,
+  Package,
+  ShoppingCart,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { Asset, Modal } from "../../Home Page/src/components";
+import { useI18n } from "../../Home Page/src/i18n";
+import { IndicatorHeader, IndicatorFooter } from "./Chrome";
+import { platforms, categories, selectProducts } from "../shared/catalog.mjs";
+import "./indicator.css";
+const Img = ({ name, alt = "", ...props }) => (
+  <img
+    src={"/assets/ind-" + name + ".webp"}
+    alt={alt}
+    decoding="async"
+    {...props}
+  />
+);
+const benefits = [
+  ["analyze", "Analyze Faster", "تحلیل سریع‌تر"],
+  ["entries", "Find Better Entries", "ورودهای بهتر"],
+  ["improve", "Improve Your Trades", "بهبود معاملات"],
+  ["confidence", "Trade with Confidence", "معامله با اطمینان"],
+];
+const promises = [
+  [
+    "quality",
+    "High Quality",
+    "کیفیت بالا",
+    "Built for analysis",
+    "برای تحلیل بازار",
+  ],
+  [
+    "updates",
+    "Product Updates",
+    "به‌روزرسانی محصول",
+    "See product terms",
+    "طبق شرایط محصول",
+  ],
+  [
+    "support",
+    "Dedicated Support",
+    "پشتیبانی اختصاصی",
+    "Contact the creator",
+    "ارتباط با سازنده",
+  ],
+  [
+    "trusted",
+    "Made for Traders",
+    "برای معامله‌گران",
+    "Tools for your workflow",
+    "ابزار متناسب با شما",
+  ],
+];
+export default function IndicatorPage() {
+  const { t, lang } = useI18n();
+  const [products, setProducts] = useState([]),
+    [loading, setLoading] = useState(true),
+    [error, setError] = useState("");
+  const [query, setQuery] = useState(""),
+    [platform, setPlatform] = useState([]),
+    [category, setCategory] = useState([]),
+    [maxPrice, setMaxPrice] = useState(null),
+    [sort, setSort] = useState("newest"),
+    [layout, setLayout] = useState("grid"),
+    [filtersOpen, setFiltersOpen] = useState(false),
+    [page, setPage] = useState(1),
+    [favorites, setFavorites] = useState([]),
+    [favoriteOnly, setFavoriteOnly] = useState(false),
+    [cart, setCart] = useState([]),
+    [modal, setModal] = useState(null),
+    [toast, setToast] = useState("");
+  const load = () => {
+    setLoading(true);
+    setError("");
+    fetch("/api/indicators")
+      .then(async (r) => {
+        const d = await r.json();
+        if (!r.ok) throw Error();
+        setProducts(d.config.products);
+      })
+      .catch(() =>
+        setError(
+          t(
+            "Unable to load indicators. Please retry.",
+            "بارگذاری اندیکاتورها ممکن نشد. دوباره تلاش کنید.",
+          ),
+        ),
+      )
+      .finally(() => setLoading(false));
+  };
+  useEffect(load, []);
+  useEffect(() => {
+    document.title = t(
+      "Trading Indicators — GreenOrRed",
+      "اندیکاتورهای معاملاتی — گرین‌اوررد",
+    );
+  }, [lang]);
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(""), 2500);
+    return () => clearTimeout(timer);
+  }, [toast]);
+  useEffect(
+    () => setPage(1),
+    [query, platform, category, maxPrice, sort, favoriteOnly],
+  );
+  const title = (p) => t(p.title, p.titleFa);
+  const desc = (p) => t(p.description, p.descriptionFa);
+  const money = (n) =>
+    new Intl.NumberFormat(lang === "fa" ? "fa-IR" : "en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 2,
+    }).format(n);
+  const num = (n) =>
+    new Intl.NumberFormat(lang === "fa" ? "fa-IR" : "en-US").format(n);
+  const upper = Math.max(
+    500,
+    ...products.map((p) => Math.ceil(p.price / 50) * 50),
+  );
+  const found = useMemo(
+    () =>
+      selectProducts(products, {
+        query,
+        platform,
+        category,
+        maxPrice: maxPrice ?? Infinity,
+        sort,
+      }).filter((p) => !favoriteOnly || favorites.includes(p.id)),
+    [
+      products,
+      query,
+      platform,
+      category,
+      maxPrice,
+      sort,
+      favoriteOnly,
+      favorites,
+    ],
+  );
+  const pages = Math.max(1, Math.ceil(found.length / 12));
+  const visible = found.slice(
+    (Math.min(page, pages) - 1) * 12,
+    Math.min(page, pages) * 12,
+  );
+  const toggle = (value, setter, id) =>
+    setter(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
+  const clear = () => {
+    setQuery("");
+    setPlatform([]);
+    setCategory([]);
+    setMaxPrice(null);
+    setFavoriteOnly(false);
+  };
+  const open = (name) => setModal({ kind: "info", title: name });
+  const add = (p) => {
+    if (!cart.includes(p.id)) {
+      setCart([...cart, p.id]);
+      setToast(t("Added to preview cart", "به سبد آزمایشی اضافه شد"));
+    } else setModal({ kind: "cart" });
+  };
+  const cartProducts = products.filter((p) => cart.includes(p.id));
+  const filterCount =
+    platform.length +
+    category.length +
+    (maxPrice !== null ? 1 : 0) +
+    (favoriteOnly ? 1 : 0);
+  const FilterBody = () => (
+    <>
+      <div className="ind-filter-heading">
+        <h2>{t("Filter Products", "فیلتر محصولات")}</h2>
+        {filterCount > 0 && (
+          <button onClick={clear}>{t("Reset", "پاک‌کردن")}</button>
+        )}
+      </div>
+      <div className="ind-search">
+        <input
+          aria-label={t("Search indicators", "جست‌وجوی اندیکاتورها")}
+          placeholder={t("Search indicators…", "جست‌وجوی اندیکاتورها…")}
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+        <Search size={17} />
+      </div>
+      <fieldset>
+        <legend>{t("Platform", "پلتفرم")}</legend>
+        <label>
+          <input
+            type="checkbox"
+            checked={!platform.length}
+            onChange={() => setPlatform([])}
+          />
+          <span>{t("All Platforms", "همهٔ پلتفرم‌ها")}</span>
+          <small>{num(products.length)}</small>
+        </label>
+        {platforms.map(([id, en, fa]) => (
+          <label key={id}>
+            <input
+              type="checkbox"
+              checked={platform.includes(id)}
+              onChange={() => toggle(platform, setPlatform, id)}
+            />
+            <span>{t(en, fa)}</span>
+            <small>
+              {num(products.filter((p) => p.platforms.includes(id)).length)}
+            </small>
+          </label>
+        ))}
+      </fieldset>
+      <fieldset>
+        <legend>{t("Category", "دسته‌بندی")}</legend>
+        {categories.map(([id, en, fa]) => (
+          <label key={id}>
+            <input
+              type="checkbox"
+              checked={category.includes(id)}
+              onChange={() => toggle(category, setCategory, id)}
+            />
+            <span>{t(en, fa)}</span>
+            <small>
+              {num(products.filter((p) => p.category === id).length)}
+            </small>
+          </label>
+        ))}
+      </fieldset>
+      <fieldset>
+        <legend>{t("Price Range", "محدودهٔ قیمت")}</legend>
+        <input
+          className="ind-range"
+          aria-label={t("Maximum price in USD", "حداکثر قیمت به دلار")}
+          type="range"
+          min="0"
+          max={upper}
+          step="1"
+          value={maxPrice ?? upper}
+          onChange={(e) => setMaxPrice(+e.target.value)}
+        />
+        <div className="ind-price-labels">
+          <span>{money(0)}</span>
+          <output>
+            {maxPrice === null ? t("Any price", "هر قیمت") : money(maxPrice)}
+          </output>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>{t("Rating", "امتیاز")}</legend>
+        <p className="ind-filter-note">
+          {t(
+            "Rating filters will be available with verified customer reviews.",
+            "فیلتر امتیاز پس از ثبت دیدگاه‌های معتبر خریداران فعال می‌شود.",
+          )}
+        </p>
+      </fieldset>
+      <label className="ind-favorite-filter">
+        <input
+          type="checkbox"
+          checked={favoriteOnly}
+          onChange={(e) => setFavoriteOnly(e.target.checked)}
+        />
+        {t("Favorites in this session", "علاقه‌مندی‌های این نشست")}
+      </label>
+    </>
+  );
+  return (
+    <div className="indicator-page">
+      <a href="#indicator-main" className="skip-link">
+        {t("Skip to content")}
+      </a>
+      <IndicatorHeader
+        query={query}
+        setQuery={setQuery}
+        onSearch={() =>
+          document
+            .getElementById("indicator-catalog")
+            .scrollIntoView({ behavior: "smooth" })
+        }
+        cartCount={cart.length}
+        onCart={() => setModal({ kind: "cart" })}
+        open={open}
+      />
+      <main className="page ind-main" id="indicator-main">
+        <div className="ind-breadcrumb">
+          <span>GreenOrRed</span>
+          <ChevronRight size={14} />
+          <span>{t("Indicators", "اندیکاتورها")}</span>
+        </div>
+        <section className="ind-hero" aria-labelledby="ind-title">
+          <div className="ind-hero-copy">
+            <h1 id="ind-title">
+              {t("Trading", "ابزارهای")} <em>{t("Indicators", "اندیکاتور")}</em>
+            </h1>
+            <h2>
+              {t(
+                "Powerful indicators for smarter analysis.",
+                "اندیکاتورهای قدرتمند برای تحلیل هوشمندتر.",
+              )}
+            </h2>
+            <p>
+              {t(
+                "Discover trading indicators for MetaTrader 4, MetaTrader 5, cTrader, TradingView and NinjaTrader.",
+                "اندیکاتورهای معاملاتی برای متاتریدر ۴، متاتریدر ۵، سی‌تریدر، تریدینگ‌ویو و نینجاتریدر را پیدا کنید.",
+              )}
+            </p>
+            <div className="ind-promises">
+              {promises.map(([id, en, fa, sub, subFa]) => (
+                <div key={id}>
+                  <Img name={id} />
+                  <span>
+                    <strong>{t(en, fa)}</strong>
+                    <small>{t(sub, subFa)}</small>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="ind-hero-art">
+            <Img
+              name="hero"
+              alt={t(
+                "Illustration of indicator charts and a digital hand",
+                "تصویر نمودارهای اندیکاتور و دست دیجیتال",
+              )}
+              width="1100"
+              height="760"
+              fetchPriority="high"
+            />
+            <Img
+              name="handwriting"
+              className="ind-handwriting"
+              alt="Better Tools, Bigger Opportunities"
+              lang="en"
+            />
+          </div>
+          <div className="ind-benefits">
+            {benefits.map(([id, en, fa]) => (
+              <div key={id}>
+                <Img name={id} />
+                <span>{t(en, fa)}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+        <nav
+          className="ind-platforms"
+          aria-label={t("Filter by platform", "فیلتر بر اساس پلتفرم")}
+        >
+          <button
+            className={!platform.length ? "active" : ""}
+            aria-pressed={!platform.length}
+            onClick={() => setPlatform([])}
+          >
+            <Layers />
+            <span>{t("All Platforms", "همهٔ پلتفرم‌ها")}</span>
+          </button>
+          {platforms.map(([id, en, fa]) => (
+            <button
+              key={id}
+              className={
+                platform.length === 1 && platform[0] === id ? "active" : ""
+              }
+              aria-pressed={platform.length === 1 && platform[0] === id}
+              onClick={() => setPlatform([id])}
+            >
+              <Img name={id} />
+              <span>
+                <strong>{t(en, fa)}</strong>
+                <small>{t("Indicators", "اندیکاتورها")}</small>
+              </span>
+            </button>
+          ))}
+        </nav>
+        <section id="indicator-catalog" className="ind-catalog">
+          <aside className="ind-filters">{FilterBody()}</aside>
+          <div className="ind-results">
+            <div className="ind-toolbar">
+              <h2>
+                {loading
+                  ? t("Loading indicators…", "در حال بارگذاری…")
+                  : t(
+                      `${num(found.length)} Indicators Found`,
+                      `${num(found.length)} اندیکاتور پیدا شد`,
+                    )}
+              </h2>
+              <button
+                className="ind-mobile-filter"
+                onClick={() => setFiltersOpen(true)}
+              >
+                <SlidersHorizontal size={16} />
+                {t("Filters", "فیلترها")}
+                {filterCount ? ` (${num(filterCount)})` : ""}
+              </button>
+              <select
+                aria-label={t("Sort products", "مرتب‌سازی محصولات")}
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+              >
+                <option value="newest">
+                  {t("Sort by: Newest", "مرتب‌سازی: جدیدترین")}
+                </option>
+                <option value="price-low">
+                  {t("Price: Low to high", "قیمت: کم به زیاد")}
+                </option>
+                <option value="price-high">
+                  {t("Price: High to low", "قیمت: زیاد به کم")}
+                </option>
+                <option value="name">{t("Name: A–Z", "نام محصول")}</option>
+              </select>
+              <div className="ind-layout-toggle">
+                <button
+                  aria-label={t("Grid view", "نمای شبکه‌ای")}
+                  aria-pressed={layout === "grid"}
+                  onClick={() => setLayout("grid")}
+                >
+                  <LayoutGrid size={18} />
+                </button>
+                <button
+                  aria-label={t("List view", "نمای فهرستی")}
+                  aria-pressed={layout === "list"}
+                  onClick={() => setLayout("list")}
+                >
+                  <List size={18} />
+                </button>
+              </div>
+            </div>
+            {(filterCount > 0 || query) && (
+              <div className="ind-active-filters">
+                {platform.map((id) => (
+                  <button
+                    key={id}
+                    onClick={() => toggle(platform, setPlatform, id)}
+                  >
+                    {t(...platforms.find((p) => p[0] === id).slice(1))}
+                    <X size={12} />
+                  </button>
+                ))}
+                {category.map((id) => (
+                  <button
+                    key={id}
+                    onClick={() => toggle(category, setCategory, id)}
+                  >
+                    {t(...categories.find((p) => p[0] === id).slice(1))}
+                    <X size={12} />
+                  </button>
+                ))}
+                <button onClick={clear}>
+                  {t("Clear all", "پاک‌کردن همه")}
+                </button>
+              </div>
+            )}
+            {error ? (
+              <div className="ind-empty" role="alert">
+                <p>{error}</p>
+                <button className="ind-button" onClick={load}>
+                  {t("Retry")}
+                </button>
+              </div>
+            ) : loading ? (
+              <div className="ind-empty" aria-live="polite">
+                {t("Loading your catalog…", "در حال بارگذاری فروشگاه…")}
+              </div>
+            ) : !found.length ? (
+              <div className="ind-empty">
+                <Package size={42} strokeWidth={1.2} />
+                <h3>
+                  {products.length
+                    ? t(
+                        "No matching indicators",
+                        "اندیکاتوری مطابق فیلترها پیدا نشد",
+                      )
+                    : t(
+                        "Your indicator collection starts here",
+                        "فروشگاه اندیکاتور شما از اینجا آغاز می‌شود",
+                      )}
+                </h3>
+                <p>
+                  {products.length
+                    ? t(
+                        "Try another platform or clear your filters.",
+                        "پلتفرم دیگری انتخاب کنید یا فیلترها را پاک کنید.",
+                      )
+                    : t(
+                        "Published indicators will appear here. Add your first product through Manage indicators.",
+                        "اندیکاتورهای منتشرشده در این بخش نمایش داده می‌شوند. اولین محصول را از مدیریت اندیکاتورها اضافه کنید.",
+                      )}
+                </p>
+                {products.length ? (
+                  <button className="ind-button outline" onClick={clear}>
+                    {t("Clear filters", "پاک‌کردن فیلترها")}
+                  </button>
+                ) : (
+                  <a
+                    className="ind-button outline"
+                    href="/indicator-preview/manage"
+                  >
+                    {t("Manage indicators", "مدیریت اندیکاتورها")}
+                    <ArrowRight size={16} />
+                  </a>
+                )}
+              </div>
+            ) : (
+              <div
+                className={
+                  "ind-product-grid " + (layout === "list" ? "as-list" : "")
+                }
+              >
+                {visible.map((p) => (
+                  <article className="ind-product" key={p.id}>
+                    <div className="ind-product-image">
+                      <button
+                        className="ind-image-open"
+                        onClick={() =>
+                          setModal({ kind: "product", product: p })
+                        }
+                        aria-label={t("View details: ", "جزئیات: ") + title(p)}
+                      >
+                        <img
+                          src={p.image}
+                          alt={title(p)}
+                          loading="lazy"
+                          width="640"
+                          height="360"
+                        />
+                      </button>
+                      <button
+                        className={
+                          "ind-heart " +
+                          (favorites.includes(p.id) ? "selected" : "")
+                        }
+                        aria-label={t("Favorite: ", "علاقه‌مندی: ") + title(p)}
+                        aria-pressed={favorites.includes(p.id)}
+                        onClick={() => toggle(favorites, setFavorites, p.id)}
+                      >
+                        <Heart size={20} />
+                      </button>
+                    </div>
+                    <div className="ind-product-body">
+                      <div className="ind-product-platforms">
+                        {p.platforms.map((id) => (
+                          <Img
+                            key={id}
+                            name={id}
+                            alt={t(
+                              ...platforms.find((x) => x[0] === id).slice(1),
+                            )}
+                            title={platforms.find((x) => x[0] === id)[1]}
+                          />
+                        ))}
+                      </div>
+                      <h3>{title(p)}</h3>
+                      <p>{desc(p)}</p>
+                      {lang === "fa" && (!p.titleFa || !p.descriptionFa) && (
+                        <small className="ind-translation-note">
+                          ترجمهٔ کامل این محصول هنوز ثبت نشده است؛ متن اصلی
+                          نمایش داده می‌شود.
+                        </small>
+                      )}
+                      <div className="ind-product-meta">
+                        <small>{p.creator}</small>
+                        <strong>
+                          {p.price === 0 ? t("Free", "رایگان") : money(p.price)}
+                        </strong>
+                      </div>
+                      <div className="ind-product-actions">
+                        <button
+                          className="ind-button outline"
+                          onClick={() =>
+                            setModal({ kind: "product", product: p })
+                          }
+                        >
+                          {t("View Details", "جزئیات")}
+                        </button>
+                        <button className="ind-button" onClick={() => add(p)}>
+                          {cart.includes(p.id)
+                            ? t("In Cart", "در سبد")
+                            : t("Add to Cart", "افزودن به سبد")}
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
+            {pages > 1 && (
+              <nav
+                className="ind-pagination"
+                aria-label={t("Catalog pages", "صفحات فروشگاه")}
+              >
+                <button
+                  disabled={page === 1}
+                  onClick={() => setPage((p) => p - 1)}
+                  aria-label={t("Previous page", "صفحهٔ قبل")}
+                >
+                  <ChevronLeft />
+                </button>
+                <span>
+                  {num(Math.min(page, pages))} / {num(pages)}
+                </span>
+                <button
+                  disabled={page >= pages}
+                  onClick={() => setPage((p) => p + 1)}
+                  aria-label={t("Next page", "صفحهٔ بعد")}
+                >
+                  <ChevronRight />
+                </button>
+              </nav>
+            )}
+          </div>
+        </section>
+        <section className="ind-custom">
+          <Asset name="request-paper" />
+          <div>
+            <h2>
+              {t(
+                "Can’t find what you need?",
+                "ابزار موردنیازتان را پیدا نکردید؟",
+              )}
+            </h2>
+            <p>
+              {t(
+                "Request a custom indicator tailored to your strategy.",
+                "اندیکاتور اختصاصی متناسب با استراتژی خود درخواست کنید.",
+              )}
+            </p>
+          </div>
+          <button
+            className="ind-button"
+            onClick={() =>
+              open(t("Request Custom Indicator", "درخواست اندیکاتور اختصاصی"))
+            }
+          >
+            {t("Request Custom Indicator", "درخواست اندیکاتور اختصاصی")}
+            <ArrowRight size={17} />
+          </button>
+          <div className="ind-custom-features">
+            {[
+              [
+                "custom-gear",
+                "Custom Development",
+                "توسعهٔ اختصاصی",
+                "By Experts",
+                "توسط متخصصان",
+              ],
+              [
+                "custom-people",
+                "Fair Pricing",
+                "قیمت‌گذاری شفاف",
+                "Get a quote",
+                "دریافت برآورد",
+              ],
+              [
+                "custom-clock",
+                "Delivery Planning",
+                "برنامهٔ تحویل",
+                "Agreed milestones",
+                "مراحل توافق‌شده",
+              ],
+            ].map(([id, en, fa, sub, subFa]) => (
+              <div key={id}>
+                <Img name={id} />
+                <span>
+                  <strong>{t(en, fa)}</strong>
+                  <small>{t(sub, subFa)}</small>
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
+      <IndicatorFooter open={open} />
+      {toast && (
+        <div className="toast" role="status">
+          {toast}
+        </div>
+      )}
+      {filtersOpen && (
+        <Modal
+          title={t("Filter Products", "فیلتر محصولات")}
+          onClose={() => setFiltersOpen(false)}
+        >
+          <div className="ind-filter-dialog">
+            {FilterBody()}
+            <button
+              className="ind-button"
+              onClick={() => setFiltersOpen(false)}
+            >
+              {t(
+                `Show ${num(found.length)} indicators`,
+                `نمایش ${num(found.length)} اندیکاتور`,
+              )}
+            </button>
+          </div>
+        </Modal>
+      )}
+      {modal && (
+        <Modal
+          title={
+            modal.kind === "product"
+              ? title(modal.product)
+              : modal.kind === "cart"
+                ? t("Your preview cart", "سبد آزمایشی شما")
+                : modal.title
+          }
+          onClose={() => setModal(null)}
+        >
+          {modal.kind === "product" ? (
+            <div className="ind-details">
+              <img src={modal.product.image} alt={title(modal.product)} />
+              <p>{desc(modal.product)}</p>
+              <dl>
+                <dt>{t("Creator", "سازنده")}</dt>
+                <dd>{modal.product.creator || "—"}</dd>
+                <dt>{t("Platforms", "پلتفرم‌ها")}</dt>
+                <dd>
+                  {modal.product.platforms
+                    .map((id) =>
+                      t(...platforms.find((x) => x[0] === id).slice(1)),
+                    )
+                    .join(" · ")}
+                </dd>
+                <dt>{t("Price", "قیمت")}</dt>
+                <dd>{money(modal.product.price)}</dd>
+              </dl>
+              <button className="ind-button" onClick={() => add(modal.product)}>
+                {t("Add to Cart", "افزودن به سبد")}
+              </button>
+              <small>
+                {t(
+                  "Preview only. Payment, licenses and downloads are not connected.",
+                  "صرفاً پیش‌نمایش؛ پرداخت، مجوز و دانلود هنوز متصل نیستند.",
+                )}
+              </small>
+            </div>
+          ) : modal.kind === "cart" ? (
+            <div className="ind-cart">
+              <p>
+                {t(
+                  "Preview cart — no order or payment is submitted. Items are kept for this session only.",
+                  "سبد آزمایشی؛ سفارش یا پرداختی انجام نمی‌شود. موارد فقط در این نشست نگه داشته می‌شوند.",
+                )}
+              </p>
+              {cartProducts.length ? (
+                cartProducts.map((p) => (
+                  <div className="ind-cart-row" key={p.id}>
+                    <span>{title(p)}</span>
+                    <strong>{money(p.price)}</strong>
+                    <button
+                      onClick={() => setCart(cart.filter((id) => id !== p.id))}
+                      aria-label={t("Remove ", "حذف ") + title(p)}
+                    >
+                      <X size={18} />
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p>{t("Your cart is empty.", "سبد شما خالی است.")}</p>
+              )}
+              {cartProducts.length > 0 && (
+                <p>
+                  <strong>
+                    {t("Total", "مجموع")}:{" "}
+                    {money(cartProducts.reduce((s, p) => s + p.price, 0))}
+                  </strong>
+                </p>
+              )}
+            </div>
+          ) : (
+            <p>
+              {t(
+                "This service is not connected in the indicator preview. No request or account has been submitted.",
+                "این سرویس در پیش‌نمایش اندیکاتورها هنوز متصل نیست؛ درخواست یا حسابی ثبت نشده است.",
+              )}
+            </p>
+          )}
+        </Modal>
+      )}
+    </div>
+  );
+}

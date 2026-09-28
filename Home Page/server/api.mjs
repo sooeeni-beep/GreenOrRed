@@ -1,3 +1,4 @@
+import { catalogApi } from "../../Indicator Page/server/catalog.mjs";
 import {
   defaultConfig,
   configSchema,
@@ -30,6 +31,7 @@ export async function handleApi(request, db, userId, bucket) {
       ["GET", "HEAD"].includes(request.method)
     )
       return readMedia(request, bucket);
+    if (path === "/api/indicators") return await catalogApi(request, db);
     if (path === "/api/home" && request.method === "GET") {
       const row = await db
         .prepare("SELECT config,revision FROM home_state WHERE id = ?")
@@ -61,6 +63,7 @@ export async function handleApi(request, db, userId, bucket) {
         { error: "Only the homepage owner can administer this site." },
         403,
       );
+    if (path === "/api/admin/indicators") return await catalogApi(request, db, true);
     if (path === "/api/admin/media" && request.method === "POST") {
       const origin = request.headers.get("origin");
       if (origin && origin !== new URL(request.url).origin)

@@ -62,7 +62,7 @@ function devApi() {
           );
           res.statusCode = response.status;
           response.headers.forEach((v, k) => res.setHeader(k, v));
-          res.end(await response.text());
+          res.end(Buffer.from(await response.arrayBuffer()));
         } catch (e) {
           res.statusCode = 500;
           res.end(JSON.stringify({ error: e.message }));

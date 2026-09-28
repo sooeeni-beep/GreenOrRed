@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import {
   Search,
   ChevronDown,
@@ -16,10 +16,14 @@ import HeaderNavigation from "./HeaderNavigation";
 import { destination } from "../shared/navigation.mjs";
 import HeroMedia from "./HeroMedia";
 import { I18nProvider, useI18n } from "./i18n";
+const IndicatorPage = lazy(() => import("../../Indicator Page/src/IndicatorPage.jsx"));
+const IndicatorManage = lazy(() => import("../../Indicator Page/src/IndicatorManage.jsx"));
 export default function App() {
   return (
     <I18nProvider>
-      {location.pathname.startsWith("/admin") ? (
+      {/^\/indicator-preview(?:\/manage)?\/?$/.test(location.pathname) ? (
+        <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{location.pathname.includes("/manage") ? <IndicatorManage/> : <IndicatorPage/>}</Suspense>
+      ) : location.pathname.startsWith("/admin") ? (
         <Admin />
       ) : destination(location.pathname) ? (
         <DestinationPage />

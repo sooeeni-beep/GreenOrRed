@@ -13,6 +13,7 @@ export default {
     if (request.method !== "GET" && request.method !== "HEAD")
       return new Response("Method not allowed", { status: 405 });
     if (
+      /^\/indicator-preview(?:\/manage)?\/?$/.test(url.pathname) ||
       destination(url.pathname) ||
       url.pathname === "/" ||
       url.pathname === "/admin" ||
