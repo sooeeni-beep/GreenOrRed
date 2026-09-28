@@ -43,24 +43,11 @@ const jobs = [
     n + " LOGO in Indicator Card (Just for show the Indicators Plateform).png",
     120,
   ]),
-  [
-    "custom-gear",
-    "ChatGPT Image Sep 28, 2026, 11_38_54 AM.png",
-    100,
-    { left: 875, top: 210, width: 140, height: 210 },
-  ],
-  [
-    "custom-people",
-    "ChatGPT Image Sep 28, 2026, 11_38_54 AM.png",
-    100,
-    { left: 1325, top: 210, width: 130, height: 210 },
-  ],
-  [
-    "custom-clock",
-    "ChatGPT Image Sep 28, 2026, 11_38_54 AM.png",
-    100,
-    { left: 1650, top: 210, width: 150, height: 210 },
-  ],
+  ["custom-paper", "Paper Icon in below of Page.png", 160],
+  ["custom-background", "banner background in below of Page.png", 1600],
+  ["custom-gear", "custom development in below of Page.png", 100, {left:0,top:0,width:143,height:140}],
+  ["custom-people", "fair pricing in below of Page.png", 100, {left:0,top:0,width:149,height:120}],
+  ["custom-clock", "on time delivery in below of Page.png", 100, {left:0,top:0,width:128,height:134}],
 ];
 for (const [key, file, width, crop] of jobs) {
   let p = sharp(source + file);

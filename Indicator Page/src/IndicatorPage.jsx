@@ -618,7 +618,7 @@ export default function IndicatorPage() {
           </div>
         </section>
         <section className="ind-custom">
-          <Asset name="request-paper" />
+          <Img name="custom-paper" className="asset" />
           <div>
             <h2>
               {t(

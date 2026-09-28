@@ -23,7 +23,7 @@ export function MediaPresentation({
       ) : (
         <div className="media-intro">
           <span className="media-brand brand-mark">
-            <Asset name="brand" alt="GreenOrRed" />
+            <Asset name="brand-mark" alt="GreenOrRed" />
           </span>
           <h2>
             {item.mode === "market"

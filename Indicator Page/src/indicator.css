@@ -552,7 +552,7 @@
   margin: 26px 0 18px;
   padding: 23px 18px;
   border-radius: 8px;
-  background: #f5ede1 url("/assets/ind-background.webp") center/cover;
+  background: #f5ede1 url("/assets/ind-custom-background.webp") center/cover;
   border: 1px solid #f0e8dc;
 }
 .ind-custom > .asset {
@@ -1136,3 +1136,9 @@
   }
 }
 .ind-filter-dialog .ind-filter-heading h2 { display:none; }
+
+/* Keep the supplied request benefits visible at every breakpoint. */
+.ind-custom{flex-wrap:wrap;background-image:url('/assets/ind-custom-background.webp')}
+.ind-custom-features{display:flex;flex:1 1 410px;justify-content:space-between;gap:12px}
+@media(max-width:1200px){.ind-custom-features{display:flex;flex-basis:100%;margin-inline-start:0;padding-top:14px;border-top:1px solid #dedccf}}
+@media(max-width:700px){.ind-custom-features{grid-column:1/-1;display:grid;grid-template-columns:1fr;gap:14px}.ind-custom-features>div{border:0;padding:0}.ind-custom-features strong,.ind-custom-features small{font-size:12px}}

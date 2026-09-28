@@ -164,3 +164,19 @@ await writeFile(
   JSON.stringify(report, null, 2),
 );
 console.log("Prepared " + report.length + " assets; originals preserved.");
+
+// Derive the symbol from the same uploaded logo, excluding the wordmark components.
+const logoPath = root + "../Indicator Page/assets/LOGO-1.png";
+const {data: logo, info: logoInfo} = await sharp(logoPath).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+const visited = new Uint8Array(logoInfo.width * logoInfo.height);
+for (let seed=0; seed<visited.length; seed++) {
+  if (visited[seed] || !logo[seed*4+3]) continue;
+  const component=[seed]; visited[seed]=1; let minX=logoInfo.width;
+  for(let cursor=0;cursor<component.length;cursor++) {
+    const p=component[cursor],x=p%logoInfo.width,y=Math.floor(p/logoInfo.width); minX=Math.min(minX,x);
+    const neighbors=[]; if(x>0)neighbors.push(p-1);if(x+1<logoInfo.width)neighbors.push(p+1);if(y>0)neighbors.push(p-logoInfo.width);if(y+1<logoInfo.height)neighbors.push(p+logoInfo.width);
+    for(const n of neighbors) if(!visited[n]&&logo[n*4+3]){visited[n]=1;component.push(n);}
+  }
+  if(minX>=700)for(const p of component)logo[p*4+3]=0;
+}
+await sharp(logo,{raw:logoInfo}).trim().resize({width:240,withoutEnlargement:true}).webp({quality:95,alphaQuality:100}).toFile(root+"public/assets/brand-mark.webp");

@@ -333,3 +333,11 @@ Restore the complete education-banner asset with its English handwriting in all 
 ## ۲۲. اتصال هوم و اندیکاتورها — ۲۸ سپتامبر ۲۰۲۶
 
 طبق درخواست جدید مالک برای بازبینی و کامنت‌گذاری از همان Home Test، تصمیم استقلال ناوبری در بخش ۲۱ تغییر کرد: منوی Marketplace → Indicators، کارت Indicators در بخش Trading Tools و گزینهٔ Indicators فوتر هوم اکنون `/marketplace/indicators` را باز می‌کنند. این مسیر همان صفحهٔ اندیکاتور ساخته‌شده است؛ مسیر قبلی `/indicator-preview` و مدیریت آن همچنان معتبرند. لوگو و لینک Home/خانه در بالای صفحهٔ اندیکاتورها به `/` برمی‌گردند. همهٔ جابه‌جایی‌ها در همان تب انجام می‌شوند. ظاهر، Assetها و دادهٔ محصولات تغییر نکرده‌اند؛ این اتصال به معنای فعال‌شدن پرداخت یا دیگر خدمات نیست.
+
+## 23. Shared logo and indicator request-banner asset refresh
+
+- The current uploaded logo is `Indicator Page/assets/LOGO-1.png`. Both pages and management views use its shared `brand.webp` derivative. The deleted `Home Page/assets/LOGO.png` is no longer a build dependency.
+- Hero media uses `brand-mark.webp`, extracted from the same uploaded logo without its wordmark; the full symbol fits its container without clipping.
+- The Indicator request banner now uses the separate supplied background, paper, development, pricing and delivery artwork instead of the former composite/PSD. Icon crops exclude embedded English labels. Labels and the CTA remain real, translatable EN/FA text; the supplied button image is a visual reference, not a text bitmap.
+- Request benefits remain visible at smaller widths, wrapping beneath the main content. Desktop preview and production build were checked.
+- GitHub asset updates require rebuilding and redeploying the Site. A stale deleted-logo reference was repaired; no recent runtime errors explained the reported Explore failure, so that UI cause is not established.
