@@ -330,6 +330,10 @@ export default function IndicatorManage() {
                           update("price", v === "" ? "" : Number(v))
                         }
                       />
+                      <Choice en="Product badge (editorial)" fa="برچسب محصول (انتخاب مدیر)" value={product.badge ?? 'none'} onChange={v => update('badge',v)} options={[
+                        ['none','None','بدون برچسب'],['new','New','جدید'],['popular','Popular','محبوب'],['bestseller','Bestseller','پرفروش']]} />
+                      <Choice en="Access eligibility" fa="شرط دسترسی" value={product.access ?? 'public'} onChange={v => update('access',v)} options={[
+                        ['public','Everyone','همه کاربران'],['signal-provider','Verified signal providers only','فقط ارائه‌دهندگان سیگنال تأییدشده']]} />
                       <Choice
                         en="Publication"
                         fa="وضعیت انتشار"

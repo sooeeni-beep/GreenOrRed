@@ -1142,3 +1142,20 @@
 .ind-custom-features{display:flex;flex:1 1 410px;justify-content:space-between;gap:12px}
 @media(max-width:1200px){.ind-custom-features{display:flex;flex-basis:100%;margin-inline-start:0;padding-top:14px;border-top:1px solid #dedccf}}
 @media(max-width:700px){.ind-custom-features{grid-column:1/-1;display:grid;grid-template-columns:1fr;gap:14px}.ind-custom-features>div{border:0;padding:0}.ind-custom-features strong,.ind-custom-features small{font-size:12px}}
+
+/* Catalog review: bounded sticky filters and equal-width request benefits. */
+@media(min-width:701px){.ind-filters{position:sticky;top:16px;max-height:calc(100dvh - 32px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}}
+.ind-product{scroll-margin-top:20px}
+.ind-platforms button.active{background:#f4f8f2;color:#064e3b;border-color:#087354;box-shadow:inset 0 0 0 1px #087354}
+.ind-platforms .active small{color:#32685e}
+.ind-handwriting{inset-inline-end:18px}
+.ind-custom-features{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-inline-start:0}
+.ind-custom-features>div{justify-content:center;padding:0 14px;min-width:0}
+.ind-custom-features img{flex-shrink:0}
+.ind-custom-features strong,.ind-custom-features small{font-size:11px;line-height:1.4}
+.ind-badge{position:absolute;inset-inline-start:8px;top:8px;z-index:1;padding:5px 12px;border-radius:4px;background:#006a43;color:white;font-size:12px;font-weight:700;pointer-events:none}
+.ind-badge.popular{background:#e33b22}
+.ind-rating{display:flex;align-items:center;gap:3px;color:#927044;margin:9px 0}
+.ind-rating small{margin-inline-start:5px;color:#63716c;font-size:11px}
+.ind-access{display:block;color:#006849;margin:6px 0}
+@media(max-width:700px){.ind-custom-features{grid-template-columns:1fr;gap:16px}.ind-custom-features>div{justify-content:flex-start;padding:0}.ind-handwriting{inset-inline-end:12px}}

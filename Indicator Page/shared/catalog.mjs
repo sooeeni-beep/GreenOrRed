@@ -35,6 +35,8 @@ export const indicatorSchema = z
       .max(5),
     category: z.enum(categories.map((c) => c[0])),
     price: z.number().finite().min(0).max(1000000),
+    badge: z.enum(['none','new','popular','bestseller']).default('none'),
+    access: z.enum(['public','signal-provider']).default('public'),
     currency: z.literal("USD").default("USD"),
     status: z.enum(["draft", "published"]).default("draft"),
     createdAt: z.string().datetime(),

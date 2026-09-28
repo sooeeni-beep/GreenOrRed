@@ -341,3 +341,13 @@ Restore the complete education-banner asset with its English handwriting in all 
 - The Indicator request banner now uses the separate supplied background, paper, development, pricing and delivery artwork instead of the former composite/PSD. Icon crops exclude embedded English labels. Labels and the CTA remain real, translatable EN/FA text; the supplied button image is a visual reference, not a text bitmap.
 - Request benefits remain visible at smaller widths, wrapping beneath the main content. Desktop preview and production build were checked.
 - GitHub asset updates require rebuilding and redeploying the Site. A stale deleted-logo reference was repaired; no recent runtime errors explained the reported Explore failure, so that UI cause is not established.
+
+## 24. Indicator catalog interaction review
+
+- Desktop filters stick 16px below the viewport edge, scroll internally when taller than the viewport, and are bounded by the catalog so they never cover the request banner/footer. Mobile retains its filter dialog.
+- View more appends batches of 12 matching products, preserves previous products, and scrolls to the first new card (respecting reduced motion). Filtering resets the visible batch. This is incremental display of the existing catalog response, not server pagination.
+- Platform selection uses a green outline on a light surface. Product platform logos follow the canonical MT4, MT5, cTrader, TradingView, NinjaTrader ordering.
+- Hero promise icon crops now include the complete shield/community artwork; handwriting shifts away from the benefits column. Request benefits use three equal columns and stack on small screens.
+- Product badges are explicit owner selections (None/New/Popular/Bestseller), not computed claims about sales. Only select Popular/Bestseller when supported by actual evidence. Automatic sales/review ranking is future work.
+- Price zero means Free. Access eligibility can be Public or Verified Signal Provider; restricted items cannot enter the preview cart. This is metadata/UI only: secure downloads must eventually enforce authenticated eligibility server-side. No downloadable product-file URL is exposed by this implementation.
+- Cards show five unfilled stars with No reviews yet. Actual review submission, verified purchase eligibility, moderation and aggregate ratings remain unimplemented; no synthetic ratings are displayed.

@@ -1,5 +1,6 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
+  Star,
   ArrowRight,
   Search,
   Heart,
@@ -149,11 +150,17 @@ export default function IndicatorPage() {
       favorites,
     ],
   );
-  const pages = Math.max(1, Math.ceil(found.length / 12));
-  const visible = found.slice(
-    (Math.min(page, pages) - 1) * 12,
-    Math.min(page, pages) * 12,
-  );
+  const batchStart = useRef(null);
+  const visible = found.slice(0, page * 12);
+  useEffect(() => {
+    if (batchStart.current === null) return;
+    document.getElementById(`indicator-${batchStart.current}`)?.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
+    batchStart.current = null;
+  }, [page]);
+  const more = () => {
+    batchStart.current = found[visible.length]?.id ?? null;
+    setPage(p => p + 1);
+  };
   const toggle = (value, setter, id) =>
     setter(value.includes(id) ? value.filter((x) => x !== id) : [...value, id]);
   const clear = () => {
@@ -165,6 +172,7 @@ export default function IndicatorPage() {
   };
   const open = (name) => setModal({ kind: "info", title: name });
   const add = (p) => {
+    if (p.access === 'signal-provider') { open(t('Available only after verified signal-provider eligibility. Downloads are not connected yet.', 'دسترسی پس از تأیید صلاحیت ارائه‌دهندهٔ سیگنال؛ دانلود هنوز متصل نشده است.')); return; }
     if (!cart.includes(p.id)) {
       setCart([...cart, p.id]);
       setToast(t("Added to preview cart", "به سبد آزمایشی اضافه شد"));
@@ -515,8 +523,9 @@ export default function IndicatorPage() {
                 }
               >
                 {visible.map((p) => (
-                  <article className="ind-product" key={p.id}>
+                  <article className="ind-product" id={`indicator-${p.id}`} key={p.id}>
                     <div className="ind-product-image">
+                      {p.badge && p.badge !== 'none' && <span className={`ind-badge ${p.badge}`}>{t(...({bestseller:['Bestseller','پرفروش'],new:['New','جدید'],popular:['Popular','محبوب']}[p.badge]))}</span>}
                       <button
                         className="ind-image-open"
                         onClick={() =>
@@ -546,7 +555,7 @@ export default function IndicatorPage() {
                     </div>
                     <div className="ind-product-body">
                       <div className="ind-product-platforms">
-                        {p.platforms.map((id) => (
+                        {platforms.map(([id]) => id).filter(id => p.platforms.includes(id)).map((id) => (
                           <Img
                             key={id}
                             name={id}
@@ -565,6 +574,11 @@ export default function IndicatorPage() {
                           نمایش داده می‌شود.
                         </small>
                       )}
+                      <div className="ind-rating" aria-label={t('No reviews yet', 'هنوز امتیازی ثبت نشده')}>
+                        {[1,2,3,4,5].map(n => <Star key={n} size={14} aria-hidden="true" />)}
+                        <small>{t('No reviews yet','بدون امتیاز')}</small>
+                      </div>
+                      {p.access === 'signal-provider' && <small className="ind-access">{t('Signal providers only','ویژهٔ ارائه‌دهندگان سیگنال')}</small>}
                       <div className="ind-product-meta">
                         <small>{p.creator}</small>
                         <strong>
@@ -581,7 +595,7 @@ export default function IndicatorPage() {
                           {t("View Details", "جزئیات")}
                         </button>
                         <button className="ind-button" onClick={() => add(p)}>
-                          {cart.includes(p.id)
+                          {p.access === 'signal-provider' ? t('Restricted access','دسترسی ویژه') : cart.includes(p.id)
                             ? t("In Cart", "در سبد")
                             : t("Add to Cart", "افزودن به سبد")}
                         </button>
@@ -591,30 +605,8 @@ export default function IndicatorPage() {
                 ))}
               </div>
             )}
-            {pages > 1 && (
-              <nav
-                className="ind-pagination"
-                aria-label={t("Catalog pages", "صفحات فروشگاه")}
-              >
-                <button
-                  disabled={page === 1}
-                  onClick={() => setPage((p) => p - 1)}
-                  aria-label={t("Previous page", "صفحهٔ قبل")}
-                >
-                  <ChevronLeft />
-                </button>
-                <span>
-                  {num(Math.min(page, pages))} / {num(pages)}
-                </span>
-                <button
-                  disabled={page >= pages}
-                  onClick={() => setPage((p) => p + 1)}
-                  aria-label={t("Next page", "صفحهٔ بعد")}
-                >
-                  <ChevronRight />
-                </button>
-              </nav>
-            )}
+            {visible.length < found.length && <div className="ind-pagination"><button className="ind-button" onClick={more}>{t('View more','نمایش بیشتر')}</button></div>}
+
           </div>
         </section>
         <section className="ind-custom">
@@ -729,7 +721,7 @@ export default function IndicatorPage() {
                     .join(" · ")}
                 </dd>
                 <dt>{t("Price", "قیمت")}</dt>
-                <dd>{money(modal.product.price)}</dd>
+                <dd>{modal.product.price === 0 ? t('Free','رایگان') : money(modal.product.price)}</dd>
               </dl>
               <button className="ind-button" onClick={() => add(modal.product)}>
                 {t("Add to Cart", "افزودن به سبد")}

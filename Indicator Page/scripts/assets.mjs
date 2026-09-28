@@ -30,7 +30,7 @@ const jobs = [
     key,
     n + " in Hero.png",
     120,
-    { left: 0, top: 0, width: 650, height: 724 },
+    { left: 0, top: 0, width: ["updates", "trusted"].includes(key) ? 735 : 650, height: 724 },
   ]),
   ...[
     ["mt4", "MetaTrader 4"],
