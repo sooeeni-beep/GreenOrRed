@@ -153,7 +153,7 @@ export default function ExpertManage() {
       setMessage(
         t(
           "Saved. Published products are now visible in the expert & strategy preview.",
-          "ذخیره شد. محصولات منتشرشده اکنون در پیش‌نمایش اندیکاتورها نمایش داده می‌شوند.",
+          "ذخیره شد. محصولات منتشرشده اکنون در پیش‌نمایش اکسپرت و استراتژی نمایش داده می‌شوند.",
         ),
       );
     } catch (e) {
@@ -231,7 +231,7 @@ export default function ExpertManage() {
         {error && (
           <div className="ind-notice error" role="alert">
             {error}
-            {authRequired && <a className="ind-button" href="/signin-with-chatgpt?return_to=%2Findicator-preview%2Fmanage" target="_top">{t('Sign in with ChatGPT','ورود با حساب ChatGPT')}</a>}
+            {authRequired && <a className="ind-button" href="/signin-with-chatgpt?return_to=%2Fexpert-preview%2Fmanage" target="_top">{t('Sign in with ChatGPT','ورود با حساب ChatGPT')}</a>}
             {!data && <button onClick={load}>{t("Retry")}</button>}
           </div>
         )}
@@ -252,7 +252,7 @@ export default function ExpertManage() {
                   disabled={data.config.products.length >= 200 || busy}
                 >
                   <Plus size={16} />
-                  {t("Add indicator", "افزودن اندیکاتور")}
+                  {t("Add product", "افزودن محصول")}
                 </button>
                 <label className="ind-manager-search">
                   <span>{t("Search products", "جست‌وجوی محصولات")}</span>
@@ -437,7 +437,7 @@ export default function ExpertManage() {
                       )}
                     </p>
                     <button className="ind-button" onClick={add}>
-                      {t("Add indicator", "افزودن اندیکاتور")}
+                      {t("Add product", "افزودن محصول")}
                     </button>
                   </div>
                 )}
@@ -448,7 +448,7 @@ export default function ExpertManage() {
       </main>
       {remove && (
         <Modal
-          title={t("Delete this indicator?", "این اندیکاتور حذف شود؟")}
+          title={t("Delete this product?", "این محصول حذف شود؟")}
           onClose={() => setRemove(null)}
         >
           <p>
