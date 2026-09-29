@@ -1,5 +1,6 @@
 import "./assets.mjs";
 import "../../Indicator Page/scripts/assets.mjs";
+import "../../Expert & Strategy Page/scripts/assets.mjs";
 import { build } from "vite";
 import { build as bundle } from "esbuild";
 import { readFile, rm } from "node:fs/promises";

@@ -19,6 +19,8 @@ import HeroMedia from "./HeroMedia";
 import { I18nProvider, useI18n } from "./i18n";
 const IndicatorPage = lazy(() => import("../../Indicator Page/src/IndicatorPage.jsx"));
 const IndicatorManage = lazy(() => import("../../Indicator Page/src/IndicatorManage.jsx"));
+const ExpertPage = lazy(() => import("../../Expert & Strategy Page/src/ExpertPage.jsx"));
+const ExpertManage = lazy(() => import("../../Expert & Strategy Page/src/ExpertManage.jsx"));
 export default function App() {
   const [pathname, setPathname] = useState(location.pathname);
   useEffect(() => {
@@ -39,6 +41,8 @@ export default function App() {
     <I18nProvider>
       {(/^\/indicator-preview(?:\/manage)?\/?$/.test(pathname) || /^\/marketplace\/indicators\/?$/.test(pathname)) ? (
         <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{pathname.includes("/manage") ? <IndicatorManage/> : <IndicatorPage/>}</Suspense>
+      ) : (/^\/expert-preview(?:\/manage)?\/?$/.test(pathname) || /^\/marketplace\/experts\/?$/.test(pathname)) ? (
+        <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{pathname.includes("/manage") ? <ExpertManage/> : <ExpertPage/>}</Suspense>
       ) : pathname.startsWith("/admin") ? (
         <Admin />
       ) : destination(pathname) ? (
@@ -421,7 +425,7 @@ function Home() {
           <div className="footer-column" key={title}>
             <h3>{t(title)}</h3>
             {links.map((link) => (
-              <button key={link} onClick={() => link === "Indicators" ? navigate("/marketplace/indicators") : open(link)}>
+              <button key={link} onClick={() => link === "Indicators" ? navigate("/marketplace/indicators") : link === "Experts" ? navigate("/marketplace/experts") : open(link)}>
                 {t(link)}
               </button>
             ))}

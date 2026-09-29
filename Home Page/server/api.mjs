@@ -1,3 +1,4 @@
+import { expertCatalogApi } from "../../Expert & Strategy Page/server/catalog.mjs";
 import { catalogApi } from "../../Indicator Page/server/catalog.mjs";
 import {
   defaultConfig,
@@ -32,6 +33,7 @@ export async function handleApi(request, db, userId, bucket) {
     )
       return readMedia(request, bucket);
     if (path === "/api/indicators") return await catalogApi(request, db);
+    if (path === "/api/experts") return await expertCatalogApi(request, db);
     if (path === "/api/home" && request.method === "GET") {
       const row = await db
         .prepare("SELECT config,revision FROM home_state WHERE id = ?")
@@ -64,6 +66,7 @@ export async function handleApi(request, db, userId, bucket) {
         403,
       );
     if (path === "/api/admin/indicators") return await catalogApi(request, db, true);
+    if (path === "/api/admin/experts") return await expertCatalogApi(request, db, true);
     if (path === "/api/admin/media" && request.method === "POST") {
       const origin = request.headers.get("origin");
       if (origin && origin !== new URL(request.url).origin)

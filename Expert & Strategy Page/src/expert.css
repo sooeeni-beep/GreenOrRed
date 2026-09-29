@@ -1,0 +1,16 @@
+/* Expert & Strategy page; the approved Indicator storefront supplies the shared structural system. */
+.expert-page .ind-hero{grid-template-columns:minmax(0,1.02fr) minmax(420px,1.15fr);min-height:330px;background:url("/assets/exp-background.webp") center/cover no-repeat;overflow:hidden}
+.expert-page .ind-hero h1{white-space:normal}
+.expert-page .ind-hero-art{min-height:330px}
+.expert-page .ind-hero-art>img:first-child{inset-inline-start:-10px;bottom:-5px;width:100%;height:100%;object-fit:contain}
+.exp-handwrite-one,.exp-handwrite-two{position:absolute;object-fit:contain;z-index:2;pointer-events:none}
+.exp-handwrite-one{width:150px!important;top:3px;inset-inline-start:14px}
+.exp-handwrite-two{width:155px!important;bottom:8px;inset-inline-end:8px}
+.expert-page .ind-promises{margin-top:20px}
+.expert-page .ind-promises img{width:28px;height:30px}
+.exp-performance{display:grid;grid-template-columns:1fr auto;gap:3px 10px;margin:8px 0 10px;padding-top:8px;border-top:1px solid #eceae4;font-size:11px}
+.exp-performance dt{color:#526c79}.exp-performance dd{margin:0;font-weight:700;color:#142e3b}
+.exp-custom{background-image:url("/assets/exp-custom-background.webp")}
+.expert-page .ind-platforms button.active{background:linear-gradient(125deg,#003f35,#0a6a5a);border-color:#075b4c}
+@media(max-width:980px){.expert-page .ind-hero{grid-template-columns:1fr;min-height:0}.expert-page .ind-hero-art{min-height:360px}.exp-handwrite-one{inset-inline-start:8%;top:0}.exp-handwrite-two{inset-inline-end:5%;bottom:0}}
+@media(max-width:700px){.expert-page .ind-hero-art{min-height:300px}.exp-handwrite-one{width:115px!important}.exp-handwrite-two{width:120px!important}}
