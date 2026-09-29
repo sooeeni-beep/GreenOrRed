@@ -1,3 +1,4 @@
+import { navigate } from "./navigation";
 import React, { useEffect, useState, lazy, Suspense } from "react";
 import {
   Search,
@@ -19,13 +20,28 @@ import { I18nProvider, useI18n } from "./i18n";
 const IndicatorPage = lazy(() => import("../../Indicator Page/src/IndicatorPage.jsx"));
 const IndicatorManage = lazy(() => import("../../Indicator Page/src/IndicatorManage.jsx"));
 export default function App() {
+  const [pathname, setPathname] = useState(location.pathname);
+  useEffect(() => {
+    const changed = () => setPathname(location.pathname);
+    const click = e => {
+      const a = e.target.closest?.('a[href]');
+      if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target || a.hasAttribute('download')) return;
+      const url = new URL(a.href);
+      if (url.origin !== location.origin || url.pathname === location.pathname) return;
+      e.preventDefault();
+      navigate(url.pathname + url.search + url.hash);
+    };
+    window.addEventListener('popstate', changed);
+    document.addEventListener('click', click);
+    return () => { window.removeEventListener('popstate', changed); document.removeEventListener('click', click); };
+  }, []);
   return (
     <I18nProvider>
-      {(/^\/indicator-preview(?:\/manage)?\/?$/.test(location.pathname) || /^\/marketplace\/indicators\/?$/.test(location.pathname)) ? (
-        <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{location.pathname.includes("/manage") ? <IndicatorManage/> : <IndicatorPage/>}</Suspense>
-      ) : location.pathname.startsWith("/admin") ? (
+      {(/^\/indicator-preview(?:\/manage)?\/?$/.test(pathname) || /^\/marketplace\/indicators\/?$/.test(pathname)) ? (
+        <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{pathname.includes("/manage") ? <IndicatorManage/> : <IndicatorPage/>}</Suspense>
+      ) : pathname.startsWith("/admin") ? (
         <Admin />
-      ) : destination(location.pathname) ? (
+      ) : destination(pathname) ? (
         <DestinationPage />
       ) : (
         <Home />
@@ -405,7 +421,7 @@ function Home() {
           <div className="footer-column" key={title}>
             <h3>{t(title)}</h3>
             {links.map((link) => (
-              <button key={link} onClick={() => link === "Indicators" ? location.assign("/marketplace/indicators") : open(link)}>
+              <button key={link} onClick={() => link === "Indicators" ? navigate("/marketplace/indicators") : open(link)}>
                 {t(link)}
               </button>
             ))}

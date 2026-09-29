@@ -351,3 +351,7 @@ Restore the complete education-banner asset with its English handwriting in all 
 - Product badges are explicit owner selections (None/New/Popular/Bestseller), not computed claims about sales. Only select Popular/Bestseller when supported by actual evidence. Automatic sales/review ranking is future work.
 - Price zero means Free. Access eligibility can be Public or Verified Signal Provider; restricted items cannot enter the preview cart. This is metadata/UI only: secure downloads must eventually enforce authenticated eligibility server-side. No downloadable product-file URL is exposed by this implementation.
 - Cards show five unfilled stars with No reviews yet. Actual review submission, verified purchase eligibility, moderation and aggregate ratings remain unimplemented; no synthetic ratings are displayed.
+
+## 25. Embedded Site navigation
+
+Internal links now use same-origin client-side history navigation, including Indicators from the Home cards/footer, header links and return-to-Home links. This preserves the current authenticated document inside the Sites editor instead of reloading the embedded frame. Browser back/forward updates the rendered route. External, modified-click, download and explicit-target links retain normal behavior. Site audience and authentication are unchanged. Reported blocked-frame behavior has no corresponding Worker error; this addresses full-document navigation without claiming an independently verified platform cause.
