@@ -355,3 +355,7 @@ Restore the complete education-banner asset with its English handwriting in all 
 ## 25. Embedded Site navigation
 
 Internal links now use same-origin client-side history navigation, including Indicators from the Home cards/footer, header links and return-to-Home links. This preserves the current authenticated document inside the Sites editor instead of reloading the embedded frame. Browser back/forward updates the rendered route. External, modified-click, download and explicit-target links retain normal behavior. Site audience and authentication are unchanged. Reported blocked-frame behavior has no corresponding Worker error; this addresses full-document navigation without claiming an independently verified platform cause.
+
+## 26. Indicator administration sign-in recovery
+
+Production logs showed 401 responses for /api/admin/indicators with no forwarded stable user ID. The manager now distinguishes missing authentication (401), wrong owner (403), and other loading failures. Authentication recovery uses a top-level dispatch-owned /signin-with-chatgpt link returning to /indicator-preview/manage. The owner check is preserved; email is not substituted for the stable ID, and no data or owner record is reset. A successful owner sign-in still needs confirmation in the user's browser.
