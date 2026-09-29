@@ -266,7 +266,7 @@ export default function ExpertPage() {
         setQuery={setQuery}
         onSearch={() =>
           document
-            .getElementById("indicator-catalog")
+            .getElementById("expert-catalog")
             .scrollIntoView({ behavior: "smooth" })
         }
         cartCount={cart.length}
@@ -277,7 +277,7 @@ export default function ExpertPage() {
         <div className="ind-breadcrumb">
           <a href="/">{t("Home", "خانه")}</a>
           <ChevronRight size={14} />
-          <span>{t("Indicators", "اندیکاتورها")}</span>
+          <span>{t("Experts & Strategies", "اکسپرت‌ها و استراتژی‌ها")}</span>
         </div>
         <section className="ind-hero exp-hero" aria-labelledby="ind-title">
           <div className="ind-hero-copy">
@@ -584,8 +584,8 @@ export default function ExpertPage() {
               onClick={() => setFiltersOpen(false)}
             >
               {t(
-                `Show ${num(found.length)} indicators`,
-                `نمایش ${num(found.length)} اندیکاتور`,
+                `Show ${num(found.length)} products`,
+                `نمایش ${num(found.length)} محصول`,
               )}
             </button>
           </div>
