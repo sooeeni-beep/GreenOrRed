@@ -367,3 +367,7 @@ Removed the extra ChatGPT sign-in button. Production requests already carry the 
 ## 28. Expert & Strategy publication
 
 Integrated upstream Expert & Strategy storefront and its separate catalog/manager. Home tools, header and footer lead to /marketplace/experts. Direct /expert-preview and /expert-preview/manage requests serve the application too. All three managers share existing-owner session compatibility; extra ChatGPT sign-in buttons are removed. SITE_OWNER_EMAIL remains protected runtime configuration and the Site remains owner-private. No catalog records or ownership records were reset.
+
+## 29. View More batch size
+
+Indicator and Expert stores retain the initial 12-card limit. View More appends 8 additional matching products per click (or the remaining fewer), keeping previous cards. The control disappears when no products remain; filtering resets to the initial batch. Existing scrolling to the first appended card is retained.
