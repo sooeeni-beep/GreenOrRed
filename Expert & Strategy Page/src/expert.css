@@ -1,5 +1,5 @@
 /* Expert & Strategy page; the approved Indicator storefront supplies the shared structural system. */
-.expert-page .ind-hero{grid-template-columns:minmax(0,1.02fr) minmax(420px,1.15fr);min-height:330px;background:url("/assets/exp-background.webp") center/cover no-repeat;overflow:hidden}
+.expert-page .ind-hero{grid-template-columns:minmax(0,1.02fr) minmax(420px,1.15fr);min-height:330px;background:url("/assets/shared-hero-background.webp") center/cover no-repeat;overflow:hidden}
 .expert-page .ind-hero h1{white-space:normal}
 .expert-page .ind-hero-art{min-height:330px}
 .expert-page .ind-hero-art>img:first-child{inset-inline-start:-45px;bottom:-5px;width:100%;height:100%;object-fit:contain}

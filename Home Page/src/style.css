@@ -4499,3 +4499,12 @@ button,
 
 /* Shared uploaded brand symbol: complete artwork, no wordmark clipping. */
 .media-intro .brand-mark img,.phone-media .media-intro .brand-mark img{position:static;width:100%;height:100%;object-fit:contain;max-width:100%}
+
+/* Shared Hero background; future pages can use the shared-hero class. */
+.hero,.ind-page .ind-hero,.expert-page .ind-hero,.shared-hero {
+  background-image:url("/assets/shared-hero-background.webp");
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+}
+.hero .hero-decoration {display:none;}

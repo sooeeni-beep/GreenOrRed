@@ -180,3 +180,6 @@ for (let seed=0; seed<visited.length; seed++) {
   if(minX>=700)for(const p of component)logo[p*4+3]=0;
 }
 await sharp(logo,{raw:logoInfo}).trim().resize({width:240,withoutEnlargement:true}).webp({quality:95,alphaQuality:100}).toFile(root+"public/assets/brand-mark.webp");
+
+// Approved shared Hero artwork, reused across all storefronts.
+await sharp(root + "assets/shared-hero-background.webp").toFile(root + "public/assets/shared-hero-background.webp");

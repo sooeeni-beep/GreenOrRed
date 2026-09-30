@@ -20,3 +20,8 @@ Indicator preview: `/indicator-preview` · Owner manager: `/indicator-preview/ma
 ## 31. Expert storefront artwork alignment
 
 Expert platform selections share the Indicator light surface and green outline. Safe and trusted promise artwork is cropped before text without clipping the icon; the delivery icon excludes adjacent artwork and lettering. The robot sits slightly left of the handwritten Hero art on desktop. At mobile widths (700px and below), handwritten Hero artwork is hidden and the robot is centered. Handwritten art remains an image and is not automatically translated.
+
+
+## 32. Shared approved Hero background
+
+Home, Indicators and Experts use the same approved ivory, diagonal-ribbon and candlestick background stored in Home Page/assets/shared-hero-background.webp. A single optimized asset is reused across pages. Future Hero sections should use the shared-hero CSS class. The previous Home chart decoration is hidden to avoid layering two chart backgrounds. Foreground artwork and handwritten images remain independent.
