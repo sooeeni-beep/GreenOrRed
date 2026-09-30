@@ -1,3 +1,4 @@
+import ViewMore from "../../Home Page/src/ViewMore";
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import {
   Star,
@@ -550,7 +551,7 @@ export default function ExpertPage() {
                 ))}
               </div>
             )}
-            {visible.length < found.length && <div className="ind-pagination"><button className="ind-button" onClick={more}>{t('View More','نمایش بیشتر')}</button></div>}
+            {visible.length < found.length && <ViewMore onClick={more}>{t('View More','نمایش بیشتر')}</ViewMore>}
 
           </div>
         </section>

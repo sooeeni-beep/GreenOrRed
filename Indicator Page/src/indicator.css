@@ -1159,3 +1159,14 @@
 .ind-rating small{margin-inline-start:5px;color:#63716c;font-size:11px}
 .ind-access{display:block;color:#006849;margin:6px 0}
 @media(max-width:700px){.ind-custom-features{grid-template-columns:1fr;gap:16px}.ind-custom-features>div{justify-content:flex-start;padding:0}.ind-handwriting{inset-inline-end:12px}}
+
+/* Shared text-and-arrow affordance for grid and list catalogs. */
+.catalog-more-wrap{display:flex;justify-content:center;margin:26px 0 12px}
+.catalog-more{display:inline-flex;flex-direction:column;align-items:center;gap:5px;padding:10px 26px;background:transparent;border:0;border-radius:0;color:#32685e;font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:color .18s ease}
+.catalog-more span{border-bottom:1px solid transparent;transition:border-color .18s ease}
+.catalog-more svg{transition:transform .18s ease,color .18s ease}
+.catalog-more:hover,.catalog-more:focus-visible{color:#006849}
+.catalog-more:hover span,.catalog-more:focus-visible span{border-color:currentColor}
+.catalog-more:hover svg,.catalog-more:focus-visible svg{transform:translateY(4px);color:#006849}
+.catalog-more:focus-visible{outline:2px solid #087354;outline-offset:3px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){.catalog-more,.catalog-more span,.catalog-more svg{transition:none}}

@@ -371,3 +371,7 @@ Integrated upstream Expert & Strategy storefront and its separate catalog/manage
 ## 29. View More batch size
 
 Indicator and Expert stores use an initial 8-card limit. View More appends 8 additional matching products per click (or the remaining fewer), keeping previous cards. The control disappears when no products remain; filtering resets to the initial batch. Existing scrolling to the first appended card is retained.
+
+## 30. Shared View More presentation
+
+Both catalogs use the same text-and-down-arrow control, with persistent hover/focus emphasis while targeted, without a filled button surface. It remains a semantic keyboard-accessible button. Grid and list render the same bounded visible slice: 8 initially and 8 more per click. Switching layout preserves the loaded count; there is no automatic infinite loading, and the footer remains reachable.
