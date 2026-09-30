@@ -8,7 +8,9 @@ await mkdir(out,{recursive:true});
 async function iconCrop(file,width=110,ratio=.28){
   const p=sharp(source+file);
   const m=await p.metadata();
-  const crop={left:0,top:0,width:Math.max(1,Math.floor(m.width*ratio)),height:m.height};
+  const crop=file==="fast delivery in below of Page.png"
+    ? {left:25,top:0,width:180,height:m.height}
+    : {left:0,top:0,width:Math.max(1,Math.floor(m.width*ratio)),height:m.height};
   return sharp(await p.extract(crop).toBuffer()).trim({threshold:12}).resize({width,withoutEnlargement:true}).webp({quality:90,alphaQuality:100});
 }
 const jobs=[
@@ -31,7 +33,7 @@ for(const [key,file] of [
   ["custom-fast","fast delivery in below of Page.png"],
   ["custom-secure","Secure & Private in below of Page.png"],
 ]){
-  await (await iconCrop(file,key.startsWith("custom-")?90:110,key.startsWith("custom-")?.30:.25)).toFile(out+"exp-"+key+".webp");
+  await (await iconCrop(file,key.startsWith("custom-")?90:110,key.startsWith("custom-")?.30:["safe","trusted"].includes(key)?.33:.25)).toFile(out+"exp-"+key+".webp");
 }
 for(const [key,file] of [
   ["mt4","MetaTrader 4 LOGO in Indicator Card (Just for show the Indicators Plateform).png"],

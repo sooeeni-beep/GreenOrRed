@@ -15,3 +15,8 @@ npm run dev
 `npm test` checks module visibility, validation, authorization, concurrency and persistence. `npm run build` produces the deployable client and Worker.
 
 Indicator preview: `/indicator-preview` · Owner manager: `/indicator-preview/manage`. The initial catalog is intentionally empty. See [Indicator Page/README.md](Indicator%20Page/README.md) and section 21 of the shared roadmap. Home navigation now connects to `/marketplace/indicators`; the original preview route remains available. See roadmap section 22.
+
+
+## 31. Expert storefront artwork alignment
+
+Expert platform selections share the Indicator light surface and green outline. Safe and trusted promise artwork is cropped before text without clipping the icon; the delivery icon excludes adjacent artwork and lettering. The robot sits slightly left of the handwritten Hero art on desktop. At mobile widths (700px and below), handwritten Hero artwork is hidden and the robot is centered. Handwritten art remains an image and is not automatically translated.
