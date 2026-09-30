@@ -9,7 +9,7 @@ async function iconCrop(file,width=110,ratio=.28){
   const p=sharp(source+file);
   const m=await p.metadata();
   const crop={left:0,top:0,width:Math.max(1,Math.floor(m.width*ratio)),height:m.height};
-  return sharp(await p.extract(crop).trim({threshold:12}).toBuffer()).resize({width,withoutEnlargement:true}).webp({quality:90,alphaQuality:100});
+  return sharp(await p.extract(crop).toBuffer()).trim({threshold:12}).resize({width,withoutEnlargement:true}).webp({quality:90,alphaQuality:100});
 }
 const jobs=[
   ["hero","Picture of Hero.png",1000],

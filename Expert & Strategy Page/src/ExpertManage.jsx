@@ -231,7 +231,6 @@ export default function ExpertManage() {
         {error && (
           <div className="ind-notice error" role="alert">
             {error}
-            {authRequired && <a className="ind-button" href="/signin-with-chatgpt?return_to=%2Fexpert-preview%2Fmanage" target="_top">{t('Sign in with ChatGPT','ورود با حساب ChatGPT')}</a>}
             {!data && <button onClick={load}>{t("Retry")}</button>}
           </div>
         )}

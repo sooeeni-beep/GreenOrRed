@@ -359,3 +359,11 @@ Internal links now use same-origin client-side history navigation, including Ind
 ## 26. Indicator administration sign-in recovery
 
 Production logs showed 401 responses for /api/admin/indicators with no forwarded stable user ID. The manager now distinguishes missing authentication (401), wrong owner (403), and other loading failures. Authentication recovery uses a top-level dispatch-owned /signin-with-chatgpt link returning to /indicator-preview/manage. The owner check is preserved; email is not substituted for the stable ID, and no data or owner record is reset. A successful owner sign-in still needs confirmation in the user's browser.
+
+## 27. Existing owner-session compatibility (supersedes section 26)
+
+Removed the extra ChatGPT sign-in button. Production requests already carry the dispatcher-authenticated owner email, but some sessions omit the stable ID. Both admin APIs now retain ID-first authorization and, only when ID is absent, match the dispatcher email against the explicit Site-owner email in protected runtime configuration. A match resolves only the existing persisted owner ID; it never bootstraps, resets or rewrites ownership. Missing/other email fails closed. This compatibility path assumes Sites dispatch owns/sanitizes identity headers; do not expose the Worker outside that boundary. Catalog and Home data remain unchanged. Tests cover both admin routes, missing identity, another email, and ID priority.
+
+## 28. Expert & Strategy publication
+
+Integrated upstream Expert & Strategy storefront and its separate catalog/manager. Home tools, header and footer lead to /marketplace/experts. Direct /expert-preview and /expert-preview/manage requests serve the application too. All three managers share existing-owner session compatibility; extra ChatGPT sign-in buttons are removed. SITE_OWNER_EMAIL remains protected runtime configuration and the Site remains owner-private. No catalog records or ownership records were reset.

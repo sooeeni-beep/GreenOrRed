@@ -29,24 +29,12 @@ export default function IndicatorManage() {
     [busy, setBusy] = useState(false),
     [remove, setRemove] = useState(null),
     [filter, setFilter] = useState("");
-  const [authRequired, setAuthRequired] = useState(false);
   const dirty = !!data && saved !== JSON.stringify(data.config);
   const load = async () => {
     setError("");
-    setAuthRequired(false);
     try {
       const r = await fetch("/api/admin/indicators");
       const d = await r.json();
-      if (r.status === 401) {
-        setAuthRequired(true);
-        setError(t('Your sign-in session is unavailable. Sign in with the site owner account to continue.', 'نشست ورود شما در دسترس نیست. برای ادامه با حساب مالک سایت وارد شوید.'));
-        return;
-      }
-      if (r.status === 403) {
-        setAuthRequired(true);
-        setError(t('This account is not the catalog owner. Sign in with the owner account.', 'این حساب مالک فروشگاه نیست. با حساب مالک وارد شوید.'));
-        return;
-      }
       if (!r.ok) throw Error();
       setData(d);
       setSaved(JSON.stringify(d.config));
@@ -54,8 +42,8 @@ export default function IndicatorManage() {
     } catch {
       setError(
         t(
-          "The catalog could not be loaded. Please retry.",
-          "بارگذاری فروشگاه ممکن نشد. دوباره تلاش کنید.",
+          "Cannot load the catalog. Sign in as the site owner and retry.",
+          "بارگذاری فروشگاه ممکن نشد. با حساب مالک سایت وارد شوید و دوباره تلاش کنید.",
         ),
       );
     }
@@ -226,7 +214,6 @@ export default function IndicatorManage() {
         {error && (
           <div className="ind-notice error" role="alert">
             {error}
-            {authRequired && <a className="ind-button" href="/signin-with-chatgpt?return_to=%2Findicator-preview%2Fmanage" target="_top">{t('Sign in with ChatGPT','ورود با حساب ChatGPT')}</a>}
             {!data && <button onClick={load}>{t("Retry")}</button>}
           </div>
         )}
