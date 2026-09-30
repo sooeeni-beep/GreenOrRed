@@ -25,3 +25,8 @@ Expert platform selections share the Indicator light surface and green outline. 
 ## 32. Shared approved Hero background
 
 Home, Indicators and Experts use the same approved ivory, diagonal-ribbon and candlestick background stored in Home Page/assets/shared-hero-background.webp. A single optimized asset is reused across pages. Future Hero sections should use the shared-hero CSS class. The previous Home chart decoration is hidden to avoid layering two chart backgrounds. Foreground artwork and handwritten images remain independent.
+
+
+## 33. Hero background refinement
+
+Approved replacement uses larger, more widely spaced pale candlesticks to reduce visual interference with foreground handwriting. Ivory diagonal ribbons remain. Journal and video motifs were reviewed and removed; the shared artwork contains no such symbols. The same asset is used on Home, Indicators and Experts.
