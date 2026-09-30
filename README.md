@@ -30,3 +30,10 @@ Home, Indicators and Experts use the same approved ivory, diagonal-ribbon and ca
 ## 33. Hero background refinement
 
 Approved replacement uses larger, more widely spaced pale candlesticks to reduce visual interference with foreground handwriting. Ivory diagonal ribbons remain. Journal and video motifs were reviewed and removed; the shared artwork contains no such symbols. The same asset is used on Home, Indicators and Experts.
+
+
+## 34. Scripts & Utilities storefront
+
+Route: /marketplace/scripts; owner manager: /scripts-preview/manage. Home Trading Tools, Marketplace navigation and footer link to this page. Header, footer, typography, page width, platform outline selection, sticky filters, grid/list layout and View More (8 initial, 8 additional per click) follow the existing storefronts. Hero and custom-request workflow artwork come from Scripts & Utilities/assets. Shared approved Hero background is reused; handwritten art remains an English image and is hidden on small screens. All changing labels are rendered as EN/FA code text.
+
+Catalog is separate from Indicators and Experts and persisted as scripts-catalog in existing home_state storage, with owner authorization and revision-conflict protection. Products support bilingual copy, artwork uploads, platform/category, Free (zero price), draft/published, badges and restricted-access metadata. The supplied sample product cards are illustrative and are not seeded as real listings; the store begins empty until the owner publishes products. Checkout, downloads, reviews, seller accounts and custom-request fulfillment are not connected; existing preview messages make this explicit. Before production, integrate these services and server-enforced entitlements. Source category taxonomy: automation, chart tools, risk management, session/time, data/analysis, miscellaneous. Platform assets include NinjaTrader, so it remains available alongside the four platforms in the mockup.

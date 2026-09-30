@@ -1,0 +1,16 @@
+.scripts-page .ind-hero{background:url('/assets/shared-hero-background.webp') center/cover no-repeat;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+.scripts-page .ind-hero h1{white-space:normal}
+.scripts-page .ind-promises{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.scripts-page .ind-promises>div{min-width:0;align-items:flex-start}
+.scripts-page .ind-promises strong,.scripts-page .ind-promises small{white-space:normal}
+.scripts-page .ind-hero-art>img:first-child{inset-inline-start:0;width:90%;height:100%;object-fit:contain}
+.scripts-page .ind-handwriting{width:130px;inset-inline-end:0;top:5px;bottom:auto;transform:none}
+.scripts-custom{display:grid;grid-template-columns:50px minmax(180px,1fr) minmax(300px,1.8fr) auto;gap:16px;align-items:center;padding:20px;margin:24px 0;background:#f1f6f1 url('/assets/scr-custom-background.webp') center/cover;border:1px solid #dce8de;border-radius:8px}
+.scripts-custom-icon{width:50px;height:50px;object-fit:contain}
+.scripts-custom h2{font-size:17px;margin:0 0 5px}.scripts-custom p{font-size:13px;margin:0;color:#526c79}
+.scripts-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.scripts-steps>div{display:flex;gap:8px;align-items:center}.scripts-steps img{width:32px;height:32px;object-fit:contain}.scripts-steps strong{display:block;font-size:13px}.scripts-steps small{display:block;font-size:12px;color:#526c79}
+@media(max-width:1100px){.scripts-custom{grid-template-columns:50px 1fr auto}.scripts-steps{grid-column:2/-1;grid-row:2}.scripts-page .ind-promises{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:980px){.scripts-page .ind-hero{grid-template-columns:1fr}.scripts-page .ind-hero-art{min-height:330px}}
+@media(max-width:700px){.scripts-page .ind-handwriting{display:none}.scripts-page .ind-hero-art>img:first-child{width:100%}.scripts-page .ind-promises{grid-template-columns:repeat(2,minmax(0,1fr))}.scripts-custom{grid-template-columns:40px 1fr}.scripts-custom-icon{width:40px;height:40px}.scripts-steps{grid-column:1/-1;grid-row:auto;grid-template-columns:1fr}.scripts-custom>.ind-button{grid-column:1/-1;justify-self:start}}
+
+.scripts-page .ind-benefits{display:none}

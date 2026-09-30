@@ -62,7 +62,7 @@ export function Tools({ open, t }) {
         {cards.map(([id, title, fa, desc, descFa]) => (
           <button
             className="tool-card"
-            onClick={() => ["indicators", "experts"].includes(id) ? navigateRoute("/marketplace/" + id) : open(t(title, fa))}
+            onClick={() => ["indicators", "experts", "scripts"].includes(id) ? navigateRoute("/marketplace/" + id) : open(t(title, fa))}
             key={id}
           >
             <Asset

@@ -19,6 +19,8 @@ import HeroMedia from "./HeroMedia";
 import { I18nProvider, useI18n } from "./i18n";
 const IndicatorPage = lazy(() => import("../../Indicator Page/src/IndicatorPage.jsx"));
 const IndicatorManage = lazy(() => import("../../Indicator Page/src/IndicatorManage.jsx"));
+const ScriptsPage = lazy(() => import("../../Scripts & Utilities/src/ScriptsPage.jsx"));
+const ScriptsManage = lazy(() => import("../../Scripts & Utilities/src/ScriptsManage.jsx"));
 const ExpertPage = lazy(() => import("../../Expert & Strategy Page/src/ExpertPage.jsx"));
 const ExpertManage = lazy(() => import("../../Expert & Strategy Page/src/ExpertManage.jsx"));
 export default function App() {
@@ -43,7 +45,9 @@ export default function App() {
         <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{pathname.includes("/manage") ? <IndicatorManage/> : <IndicatorPage/>}</Suspense>
       ) : (/^\/expert-preview(?:\/manage)?\/?$/.test(pathname) || /^\/marketplace\/experts\/?$/.test(pathname)) ? (
         <Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{pathname.includes("/manage") ? <ExpertManage/> : <ExpertPage/>}</Suspense>
-      ) : pathname.startsWith("/admin") ? (
+      ) : (/^\/scripts-preview(?:\/manage)?\/?$/.test(pathname) || /^\/marketplace\/scripts\/?$/.test(pathname)) ? (
+<Suspense fallback={<p role="status">Loading… / در حال بارگذاری…</p>}>{pathname.includes("/manage") ? <ScriptsManage/> : <ScriptsPage/>}</Suspense>
+) : pathname.startsWith("/admin") ? (
         <Admin />
       ) : destination(pathname) ? (
         <DestinationPage />
@@ -425,7 +429,7 @@ function Home() {
           <div className="footer-column" key={title}>
             <h3>{t(title)}</h3>
             {links.map((link) => (
-              <button key={link} onClick={() => link === "Indicators" ? navigate("/marketplace/indicators") : link === "Experts" ? navigate("/marketplace/experts") : open(link)}>
+              <button key={link} onClick={() => link === "Indicators" ? navigate("/marketplace/indicators") : link === "Experts" ? navigate("/marketplace/experts") : link === "Scripts" ? navigate("/marketplace/scripts") : open(link)}>
                 {t(link)}
               </button>
             ))}

@@ -1,3 +1,4 @@
+import "../../Scripts & Utilities/scripts/assets.mjs";
 import "./assets.mjs";
 import "../../Indicator Page/scripts/assets.mjs";
 import "../../Expert & Strategy Page/scripts/assets.mjs";
