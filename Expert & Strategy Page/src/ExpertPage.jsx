@@ -127,7 +127,7 @@ export default function ExpertPage() {
     ],
   );
   const batchStart = useRef(null);
-  const visible = found.slice(0, 12 + (page - 1) * 8);
+  const visible = found.slice(0, page * 8);
   useEffect(() => {
     if (batchStart.current === null) return;
     document.getElementById(`expert-${batchStart.current}`)?.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});

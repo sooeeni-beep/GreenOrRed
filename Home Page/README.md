@@ -370,4 +370,4 @@ Integrated upstream Expert & Strategy storefront and its separate catalog/manage
 
 ## 29. View More batch size
 
-Indicator and Expert stores retain the initial 12-card limit. View More appends 8 additional matching products per click (or the remaining fewer), keeping previous cards. The control disappears when no products remain; filtering resets to the initial batch. Existing scrolling to the first appended card is retained.
+Indicator and Expert stores use an initial 8-card limit. View More appends 8 additional matching products per click (or the remaining fewer), keeping previous cards. The control disappears when no products remain; filtering resets to the initial batch. Existing scrolling to the first appended card is retained.
