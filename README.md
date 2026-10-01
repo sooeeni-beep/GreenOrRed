@@ -42,3 +42,8 @@ Catalog is separate from Indicators and Experts and persisted as scripts-catalog
 ## 35. Updated Scripts Hero icons
 
 The five Hero feature icons now use the redesigned assets with the exact case-sensitive filenames ending in In Hero.png. Icon-specific crop widths preserve the full artwork while excluding baked-in English text; translated feature labels remain live text. Original PNGs are retained and optimized WebP derivatives are generated during build.
+
+
+## 36. Platform-specific utility labels
+
+Scripts storefront platform tabs retain platform names and show localized tool-type labels: MetaTrader 4/5 — Scripts & Utilities; cTrader — Plugins & Utilities; TradingView — Pine Tools; NinjaTrader — Add-ons & Utilities. This labeling distinguishes native tool types without altering platform filtering or product storage.

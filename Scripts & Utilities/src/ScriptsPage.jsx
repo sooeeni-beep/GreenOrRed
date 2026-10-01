@@ -29,6 +29,13 @@ const Img = ({ name, alt = "", ...props }) => (
     {...props}
   />
 );
+const platformToolLabels = {
+  mt4: ["Scripts & Utilities", "اسکریپت‌ها و ابزارها"],
+  mt5: ["Scripts & Utilities", "اسکریپت‌ها و ابزارها"],
+  ctrader: ["Plugins & Utilities", "افزونه‌ها و ابزارها"],
+  tradingview: ["Pine Tools", "ابزارهای پایِن"],
+  ninjatrader: ["Add-ons & Utilities", "افزونه‌ها و ابزارها"],
+};
 const benefits = [];
 const promises = [
  ["efficiency","Boost Efficiency","افزایش بهره‌وری","Save time & reduce manual work","صرفه‌جویی در زمان و کاهش کار دستی"],
@@ -357,7 +364,7 @@ export default function ScriptsPage() {
               <Img name={id} />
               <span>
                 <strong>{t(en, fa)}</strong>
-                <small>{t("Scripts & Utilities", "اسکریپت‌ها")}</small>
+                <small>{t(...platformToolLabels[id])}</small>
               </span>
             </button>
           ))}
