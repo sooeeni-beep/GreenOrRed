@@ -1,8 +1,9 @@
+import { navigate } from "../../Home Page/src/navigation";
 import React, { useState } from "react";
 import { Search, Globe, ChevronDown, Menu, X, ArrowRight } from "lucide-react";
 import { Asset } from "../../Home Page/src/components";
 import { useI18n } from "../../Home Page/src/i18n";
-import { navigation } from "../../Home Page/shared/navigation.mjs";
+import { navigation, footerDestination } from "../../Home Page/shared/navigation.mjs";
 export function ExpertHeader({
   query,
   setQuery,
@@ -55,18 +56,10 @@ export function ExpertHeader({
                 {g.items.map(([href, en, fa]) => (
                   <a
                     key={href}
-                    href={
-                      href === "/marketplace/experts"
-                        ? "#expert-catalog"
-                        : "#"
-                    }
-                    onClick={(e) => {
+                    href={href}
+                    onClick={() => {
                       setMenu(false);
                       setActive(null);
-                      if (href !== "/marketplace/experts") {
-                        e.preventDefault();
-                        open(t(en, fa));
-                      }
                     }}
                   >
                     {t(en, fa)}
@@ -164,7 +157,10 @@ export function ExpertFooter({ open }) {
         <div className="footer-column" key={title}>
           <h3>{t(title)}</h3>
           {links.map((link) => (
-            <button key={link} onClick={() => open(link)}>
+            <button key={link} onClick={() => {
+              const path = footerDestination(link);
+              path ? navigate(path) : open(t(link));
+            }}>
               {t(link)}
             </button>
           ))}

@@ -47,3 +47,8 @@ The five Hero feature icons now use the redesigned assets with the exact case-se
 ## 36. Platform-specific utility labels
 
 Scripts storefront platform tabs retain platform names and show localized tool-type labels: MetaTrader 4/5 — Scripts & Utilities; cTrader — Plugins & Utilities; TradingView — Pine Tools; NinjaTrader — Add-ons & Utilities. This labeling distinguishes native tool types without altering platform filtering or product storage.
+
+
+## 37. Cross-page storefront navigation
+
+All storefront header menus use real internal route links; dropdowns close when a destination is selected. Footers share a destination map for Home, Indicators, Experts and Scripts so visitors can move directly between built pages. Client-side navigation preserves the active Site session and language preference and supports browser Back/Forward. Unbuilt destinations retain their existing preview behavior. Brand logos link to Home.

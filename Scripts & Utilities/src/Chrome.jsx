@@ -3,7 +3,7 @@ import { Search, Globe, ChevronDown, Menu, X, ArrowRight } from "lucide-react";
 import { Asset } from "../../Home Page/src/components";
 import { useI18n } from "../../Home Page/src/i18n";
 import { navigate } from "../../Home Page/src/navigation";
-import { navigation } from "../../Home Page/shared/navigation.mjs";
+import { navigation, footerDestination } from "../../Home Page/shared/navigation.mjs";
 export function IndicatorHeader({
   query,
   setQuery,
@@ -56,11 +56,10 @@ export function IndicatorHeader({
                 {g.items.map(([href, en, fa]) => (
                   <a
                     key={href}
-                    href={href === "/marketplace/scripts" ? "#script-catalog" : href}
-                    onClick={(e) => {
+                    href={href}
+                    onClick={() => {
                       setMenu(false);
                       setActive(null);
-
                     }}
                   >
                     {t(en, fa)}
@@ -158,7 +157,10 @@ export function IndicatorFooter({ open }) {
         <div className="footer-column" key={title}>
           <h3>{t(title)}</h3>
           {links.map((link) => (
-            <button key={link} onClick={() => ["Scripts & Utilities","Scripts","Experts"].includes(link) ? navigate(link === "Experts" ? "/marketplace/experts" : "/marketplace/scripts") : link === "Indicators" ? navigate("/marketplace/indicators") : open(link)}>
+            <button key={link} onClick={() => {
+              const path = footerDestination(link);
+              path ? navigate(path) : open(t(link));
+            }}>
               {t(link, link === "Scripts & Utilities" ? "اسکریپت‌ها و ابزارها" : undefined)}
             </button>
           ))}

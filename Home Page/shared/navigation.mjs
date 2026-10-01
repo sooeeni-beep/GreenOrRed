@@ -50,3 +50,13 @@ export const destination = (path) =>
   navigation
     .flatMap((g) => g.items)
     .find((x) => x[0] === path.replace(/\/$/, ""));
+
+// Shared footer destinations for every implemented storefront.
+export const footerDestination = (label) => ({
+  Home: "/",
+  Indicators: "/marketplace/indicators",
+  Experts: "/marketplace/experts",
+  "Experts & Strategies": "/marketplace/experts",
+  Scripts: "/marketplace/scripts",
+  "Scripts & Utilities": "/marketplace/scripts",
+})[label] || null;
